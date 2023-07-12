@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NovelsRanboeTranslates.Domain\NovelsRanboeTranslates.Domain.csproj" />
+    <ProjectReference Include="..\NovelsRanboeTranslates.Repository\NovelsRanboeTranslates.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

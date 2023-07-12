@@ -1,0 +1,13 @@
+# Виключити папку bin та всі його підпапки
+.vs/
+*.vscode/
+NovelsRanboeTranslates/bin
+**/bin/
+**/bin/**
+**/bin/**/*
+
+# Виключити папку obj та всі його підпапки
+NovelsRanboeTranslates/obj
+**/obj/
+**/obj/**
+**/obj/**/*
