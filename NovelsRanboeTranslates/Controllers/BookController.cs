@@ -19,7 +19,7 @@ namespace NovelsRanboeTranslates.Controllers
         public IActionResult GetCompilation()
         {
             var compilation = _bookService.GetBooksCompilation();
-            
+
             return Ok(compilation);
         }
     }

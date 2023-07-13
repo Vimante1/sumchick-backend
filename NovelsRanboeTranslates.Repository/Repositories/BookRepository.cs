@@ -1,9 +1,6 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using MongoDB.Driver;
+using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
-using MongoDB.Driver;
-using MongoDB.Bson;
-using NovelsRanboeTranslates.Domain.Lists;
-using ZstdSharp.Unsafe;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
@@ -25,9 +22,9 @@ namespace NovelsRanboeTranslates.Repository.Repositories
                 _collection.InsertOne(entity);
                 return new Response<bool>("Correct", true, System.Net.HttpStatusCode.OK);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                return new Response<bool> (ex.Message, false, System.Net.HttpStatusCode.BadRequest);
+                return new Response<bool>(ex.Message, false, System.Net.HttpStatusCode.BadRequest);
             };
         }
 

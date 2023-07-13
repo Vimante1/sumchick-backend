@@ -2,11 +2,6 @@
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NovelsRanboeTranslates.Services.Services
 {
@@ -35,5 +30,10 @@ namespace NovelsRanboeTranslates.Services.Services
             };
         }
 
+        public Response<User> GetUserByLogin(string login)
+        {
+            var user = _repository.GetUserByLogin(login);
+            return user;
+        }
     }
 }

@@ -1,6 +1,7 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
-using NovelsRanboeTranslates.Repository.Interfaces;
+﻿using Microsoft.VisualBasic;
 using MongoDB.Driver;
+using NovelsRanboeTranslates.Domain.Models;
+using NovelsRanboeTranslates.Repository.Interfaces;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
@@ -20,12 +21,36 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             try
             {
                 _collection.InsertOne(entity);
-                return new Response<bool> ("Correct", true, System.Net.HttpStatusCode.OK);
+                return new Response<bool>("Correct", true, System.Net.HttpStatusCode.OK);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                return new Response<bool> (ex.Message, false, System.Net.HttpStatusCode.BadRequest);
+                return new Response<bool>(ex.Message, false, System.Net.HttpStatusCode.BadRequest);
             };
+        }
+
+        public Response<User> GetUserByLogin(string login)
+        {
+            try
+            {
+                var filter = Builders<User>.Filter.Eq("Login", login);
+                var user = _collection.Find(filter).FirstOrDefault();
+                if (user != null)
+                {
+                    return new Response<User>("Correct", user, System.Net.HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new Response<User>("UserNotFound", null, System.Net.HttpStatusCode.NotFound);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Something wrong with find in repository");
+                Console.WriteLine(ex);
+                return new Response<User>("UserNotFound", null, System.Net.HttpStatusCode.NotFound);
+
+            }
         }
 
         public Response<bool> Delete(User entity)
@@ -37,5 +62,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

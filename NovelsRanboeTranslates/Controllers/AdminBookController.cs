@@ -17,7 +17,7 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpPost]
         [Route("/CreateNewBook")]
-        public IActionResult CreateNewBook([FromForm]CreateNewBookViewModel book, IFormFile image)
+        public IActionResult CreateNewBook([FromForm] CreateNewBookViewModel book, IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace NovelsRanboeTranslates.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
                 }
-                
+
             }
             return Ok(ModelState);
         }

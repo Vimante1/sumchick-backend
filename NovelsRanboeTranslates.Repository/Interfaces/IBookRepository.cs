@@ -1,11 +1,4 @@
-﻿using Amazon.SecurityToken.Model;
-using NovelsRanboeTranslates.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
+﻿using NovelsRanboeTranslates.Domain.Models;
 
 namespace NovelsRanboeTranslates.Repository.Interfaces
 {
