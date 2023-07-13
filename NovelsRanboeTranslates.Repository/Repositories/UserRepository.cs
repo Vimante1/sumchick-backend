@@ -46,10 +46,8 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Something wrong with find in repository");
-                Console.WriteLine(ex);
+                Console.WriteLine("Something wrong with find in user repository GetUserByLogin" + ex);
                 return new Response<User>("UserNotFound", null, System.Net.HttpStatusCode.NotFound);
-
             }
         }
 

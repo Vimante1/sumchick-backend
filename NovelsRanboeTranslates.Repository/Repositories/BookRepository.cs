@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 
@@ -55,6 +56,21 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             var latestBooks = _collection.Find(_ => true).Sort(sort).Limit(15).ToList();
             return latestBooks;
 
+        }
+
+        public Book GetBookById(int bookId)
+        {
+            try
+            {
+                var filter = Builders<Book>.Filter.Eq("_id", bookId);
+                var book = _collection.Find(filter).FirstOrDefault();
+                if (book != null) return book;
+                else return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
         public Response<bool> Delete(Book entity)
         {

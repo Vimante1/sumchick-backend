@@ -18,9 +18,9 @@ namespace NovelsRanboeTranslates
             builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWTSettings"));
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("admin", policy =>
+                options.AddPolicy("Admin", policy =>
                 {
-                    policy.RequireRole("admin");
+                    policy.RequireRole("Admin");
                 });
             });
             builder.Services.AddSingleton<JWTSettings>();

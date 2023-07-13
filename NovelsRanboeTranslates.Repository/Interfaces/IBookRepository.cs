@@ -1,4 +1,5 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using MongoDB.Bson;
+using NovelsRanboeTranslates.Domain.Models;
 
 namespace NovelsRanboeTranslates.Repository.Interfaces
 {
@@ -6,5 +7,6 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
     {
         List<Book> GetBestBooksByGenre(List<string> genres);
         List<Book> GetLatestBooks();
+        Book GetBookById(int bookId);
     }
 }

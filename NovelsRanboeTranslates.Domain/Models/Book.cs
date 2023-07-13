@@ -4,7 +4,7 @@ namespace NovelsRanboeTranslates.Domain.Models
 {
     public class Book
     {
-        public ObjectId _id { get;set; }
+        public int _id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }
@@ -12,7 +12,7 @@ namespace NovelsRanboeTranslates.Domain.Models
         public string Author { get; set; }
         public string OriginalLanguage { get; set; }
         public string Genre { get; set; }
-        public int Views{ get; set; }
+        public int Views { get; set; }
         public List<Chapter>? Chapters { get; set; }
         public List<Comment>? Comments { get; set; }
         public DateTime Created { get; set; }
@@ -20,6 +20,8 @@ namespace NovelsRanboeTranslates.Domain.Models
 
         public Book(string title, string description, string author, string originalLanguage, string genre, string imagePath)
         {
+            Random random = new();
+            _id = random.Next(999999999);
             Title = title;
             Description = description;
             Author = author;

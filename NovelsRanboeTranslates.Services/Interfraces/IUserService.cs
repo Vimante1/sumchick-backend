@@ -7,5 +7,6 @@ namespace NovelsRanboeTranslates.Services.Interfraces
     {
         Response<User> CreateNewUser(RegistrationViewModel user);
         Response<User> GetUserByLogin(string login);
+        Response<User> Login(AuthorizationViewModel user);
     }
 }

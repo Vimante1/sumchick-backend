@@ -1,4 +1,5 @@
-﻿using NovelsRanboeTranslates.Domain.Lists;
+﻿using MongoDB.Bson;
+using NovelsRanboeTranslates.Domain.Lists;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
@@ -28,5 +29,15 @@ namespace NovelsRanboeTranslates.Services.Services
             compilation.Add(_repository.GetLatestBooks());
             return new Response<List<List<Book>>>("1.BestBooksByGenre 2.LatestBooks", compilation, System.Net.HttpStatusCode.OK);
         }
+        public Response<Book> GetBookById(int bookId)
+        {
+            var book = _repository.GetBookById(bookId);
+            if (book != null)
+            {
+                return new Response<Book>("Correct", book, System.Net.HttpStatusCode.OK);
+            }
+            else return new Response<Book>("BookNotFound", null, System.Net.HttpStatusCode.NotFound);
+        }
     }
+
 }

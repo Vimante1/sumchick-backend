@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
 
@@ -6,6 +7,7 @@ namespace NovelsRanboeTranslates.Controllers
 {
     [ApiController]
     [Route("AdminBook")]
+    //[Authorize("Admin")]
     public class AdminBookController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -50,37 +52,5 @@ namespace NovelsRanboeTranslates.Controllers
         }
 
 
-        [HttpPost]
-        [Route("/image")]
-        public IActionResult test(IFormFile image)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    if (image != null && image.Length > 0)
-                    {
-                        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-
-                        var imagePath = Path.Combine("./images/", fileName);
-
-                        using (var stream = new FileStream(imagePath, FileMode.Create))
-                        {
-                            image.CopyTo(stream);
-                        }
-                        return Ok();
-                    }
-                    else
-                    {
-                        return BadRequest("Зображення не було завантажено");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-                }
-            }
-            return Ok("ModelState worng");
-        }
     }
 }

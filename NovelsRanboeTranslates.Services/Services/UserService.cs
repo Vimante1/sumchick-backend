@@ -14,11 +14,9 @@ namespace NovelsRanboeTranslates.Services.Services
             _repository = repository;
         }
 
-        private static Random random = new Random();
-
         public Response<User> CreateNewUser(RegistrationViewModel user)
         {
-            User newUser = new User() { Login = user.Login, Password = user.Password };
+            User newUser = new() { Login = user.Login, Password = user.Password };
 
             if (_repository.Create(newUser).Result)
             {
@@ -34,6 +32,32 @@ namespace NovelsRanboeTranslates.Services.Services
         {
             var user = _repository.GetUserByLogin(login);
             return user;
+        }
+
+        public Response<User> Login(AuthorizationViewModel user)
+        {
+            try
+            {
+                var correctUser = _repository.GetUserByLogin(user.Login);
+                if (correctUser.Result == null)
+                {
+                    return correctUser;
+                }
+                else
+                {
+                    if (correctUser.Result.Password == user.Password)
+                    {
+                        return correctUser;
+                    }
+                    return new Response<User>("ThePasswordIsNotValid", null, System.Net.HttpStatusCode.Unauthorized);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something wrong in user Service with login" + ex);
+                return new Response<User>("Something wrong in user Service with login ", null, System.Net.HttpStatusCode.Unauthorized);
+            }
         }
     }
 }
