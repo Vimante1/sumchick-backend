@@ -18,7 +18,7 @@ namespace NovelsRanboeTranslates.Controllers
         }
 
         [HttpPost]
-        [Route("/CreateNewBook")]
+        [Route("CreateNewBook")]
         public IActionResult CreateNewBook([FromForm] CreateNewBookViewModel book, IFormFile image)
         {
             if (ModelState.IsValid)
@@ -51,6 +51,12 @@ namespace NovelsRanboeTranslates.Controllers
             return Ok(ModelState);
         }
 
-
+        [HttpPost]
+        [Route("AddChapter")]
+        public IActionResult AddChapter(int bookId,[FromBody] AddChapterViewModel model)
+        {
+            var result = _bookService.AddChapterToBook(bookId, model);
+            return Ok(result);
+        }
     }
 }

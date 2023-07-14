@@ -72,6 +72,23 @@ namespace NovelsRanboeTranslates.Repository.Repositories
                 return null;
             }
         }
+
+        public bool ReplaceBookById(int bookId, Book newBook)
+        {
+            try
+            {
+                var filter = Builders<Book>.Filter.Eq("_id", bookId);
+                var result = _collection.ReplaceOneAsync(filter, newBook);
+                if (result != null) { return true; }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
         public Response<bool> Delete(Book entity)
         {
             throw new NotImplementedException();

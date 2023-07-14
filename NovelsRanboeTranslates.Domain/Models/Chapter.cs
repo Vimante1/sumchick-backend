@@ -1,4 +1,7 @@
-﻿namespace NovelsRanboeTranslates.Domain.Models
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+
+namespace NovelsRanboeTranslates.Domain.Models
 {
     public class Chapter
     {
@@ -8,7 +11,7 @@
         public double Price { get; set; }
         public bool HasPrice { get; set; }
 
-        public Chapter( int id, string title, string text, double price)
+        public Chapter(int id, string title, string text, double price)
         {
             ID = id; 
             Title = title;
@@ -17,6 +20,4 @@
             HasPrice = Price > 0;
         }
     }
-
-
 }

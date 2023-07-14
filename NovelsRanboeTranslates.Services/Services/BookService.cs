@@ -1,9 +1,11 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver.Core.Operations;
 using NovelsRanboeTranslates.Domain.Lists;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
+using System.Net.WebSockets;
 
 namespace NovelsRanboeTranslates.Services.Services
 {
@@ -36,7 +38,27 @@ namespace NovelsRanboeTranslates.Services.Services
             {
                 return new Response<Book>("Correct", book, System.Net.HttpStatusCode.OK);
             }
-            else return new Response<Book>("BookNotFound", null, System.Net.HttpStatusCode.NotFound);
+            return new Response<Book>("BookNotFound", null, System.Net.HttpStatusCode.NotFound);
+        }
+
+        public Response<bool> AddChapterToBook(int bookId, AddChapterViewModel model)
+        {
+            var book = _repository.GetBookById(bookId);
+
+            if (book.Chapters == null)
+            {
+                book.Chapters = new List<Chapter>();
+            }
+            int chapterCount = (book != null && book.Chapters != null) ? book.Chapters.Count : 0;
+            var newChapter = new Chapter(chapterCount + 1, model.Title, model.Text, model.Price);
+            book.Chapters.Add(newChapter);
+            var result = _repository.ReplaceBookById(bookId, book);
+            if (result == true)
+            {
+                return new Response<bool>("Correct", result, System.Net.HttpStatusCode.OK);
+            }
+            return new Response<bool>("Something wrong", result, System.Net.HttpStatusCode.NotFound);
+
         }
     }
 

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using MongoDB.Bson;
+using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
 
 namespace NovelsRanboeTranslates.Controllers
@@ -30,5 +32,6 @@ namespace NovelsRanboeTranslates.Controllers
         {
             return Ok(_bookService.GetBookById(bookId));
         }
+
     }
 }
