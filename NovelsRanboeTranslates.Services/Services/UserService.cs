@@ -18,6 +18,10 @@ namespace NovelsRanboeTranslates.Services.Services
         {
             User newUser = new() { Login = user.Login, Password = user.Password };
 
+            var checkaName = _repository.GetUserByLogin(user.Password);
+            if(checkaName.Result == null) {
+                return new Response<User>("User already created ", null, System.Net.HttpStatusCode.BadRequest);
+            }
             if (_repository.Create(newUser).Result)
             {
                 return new Response<User>("User created", newUser, System.Net.HttpStatusCode.OK);

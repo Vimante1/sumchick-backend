@@ -34,8 +34,8 @@ namespace NovelsRanboeTranslates.Controllers
                 if (user.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     return Ok(new Response<string>("Correct", GetToken(user.Result), System.Net.HttpStatusCode.OK));
-
                 }
+                return Ok(user);
             }
             return Ok();
         }
@@ -55,7 +55,8 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpGet]
         [Route("GetUser")]
-        public IActionResult GetUser(string login) {
+        public IActionResult GetUser(string login)
+        {
 
             var user = _userService.GetUserByLogin(login);
             return Ok(user);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
 
@@ -53,10 +54,14 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpPost]
         [Route("AddChapter")]
-        public IActionResult AddChapter(int bookId,[FromBody] AddChapterViewModel model)
+        public IActionResult AddChapter(int bookId, [FromBody] AddChapterViewModel model)
         {
-            var result = _bookService.AddChapterToBook(bookId, model);
-            return Ok(result);
+            if (model != null && bookId != 0 && ModelState.IsValid)
+            {
+                var result = _bookService.AddChapterToBook(bookId, model);
+                return Ok(result);
+            }
+            return Ok(new Response<bool>("input id 0", false, System.Net.HttpStatusCode.NoContent)) ;
         }
     }
 }

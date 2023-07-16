@@ -44,20 +44,46 @@ namespace NovelsRanboeTranslates.Services.Services
         public Response<bool> AddChapterToBook(int bookId, AddChapterViewModel model)
         {
             var book = _repository.GetBookById(bookId);
+            if (book != null)
+            {
+                if (book.Chapters == null)
+                {
+                    book.Chapters = new List<Chapter>();
+                }
+                int chapterCount = (book != null && book.Chapters != null) ? book.Chapters.Count : 0;
+                var newChapter = new Chapter(chapterCount + 1, model.Title, model.Text, model.Price);
+                book.Chapters.Add(newChapter);
+                var result = _repository.ReplaceBookById(bookId, book);
+                if (result == true)
+                {
+                    return new Response<bool>("Correct", result, System.Net.HttpStatusCode.OK);
+                }
+            }
+            return new Response<bool>("Something wrong", false, System.Net.HttpStatusCode.NotFound);
+        }
 
-            if (book.Chapters == null)
+        public Response<bool> AddCommentToBook(int bookId, Comment comment)
+        {
+            var book = _repository.GetBookById(bookId);
+            if (book != null)
             {
-                book.Chapters = new List<Chapter>();
+                if (book.Comments == null)
+                {
+                    book.Comments = new List<Comment>();
+                }
+                book.Comments.Add(comment);
+
+                int totalComments = book.Comments.Count;
+                var likedComments = book.Comments.Count(c => c.Liked);
+                double percent = (double)likedComments / totalComments * 100;
+                book.LikedPercent = (int)percent;
+                var result = _repository.ReplaceBookById(bookId, book);
+                if (result == true)
+                {
+                    return new Response<bool>("Correct", result, System.Net.HttpStatusCode.OK);
+                }
             }
-            int chapterCount = (book != null && book.Chapters != null) ? book.Chapters.Count : 0;
-            var newChapter = new Chapter(chapterCount + 1, model.Title, model.Text, model.Price);
-            book.Chapters.Add(newChapter);
-            var result = _repository.ReplaceBookById(bookId, book);
-            if (result == true)
-            {
-                return new Response<bool>("Correct", result, System.Net.HttpStatusCode.OK);
-            }
-            return new Response<bool>("Something wrong", result, System.Net.HttpStatusCode.NotFound);
+            return new Response<bool>("Something wrong with add comment", false, System.Net.HttpStatusCode.NotFound);
 
         }
     }
