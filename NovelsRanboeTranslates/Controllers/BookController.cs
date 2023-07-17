@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Bson;
 using NovelsRanboeTranslates.Domain.Models;
@@ -44,5 +45,7 @@ namespace NovelsRanboeTranslates.Controllers
             }
             return Ok(new Response<bool>("input id 0", false, System.Net.HttpStatusCode.NoContent));
         }
+
+        
     }
 }

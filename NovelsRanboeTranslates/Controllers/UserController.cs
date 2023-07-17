@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
-using NovelsRanboeTranslates.Services.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ZstdSharp.Unsafe;
 
 namespace NovelsRanboeTranslates.Controllers
 {
@@ -17,10 +16,12 @@ namespace NovelsRanboeTranslates.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IBookService _bookService;
         private readonly JWTSettings _options;
-        public UserController(IUserService userService, IOptions<JWTSettings> options)
+        public UserController(IUserService userService, IOptions<JWTSettings> options, IBookService bookService)
         {
             _userService = userService;
+            _bookService = bookService;
             _options = options.Value;
         }
 
@@ -54,12 +55,28 @@ namespace NovelsRanboeTranslates.Controllers
         }
 
         [HttpGet]
-        [Route("GetUser")]
-        public IActionResult GetUser(string login)
+        [Route("GetUserByLogin")]
+        public IActionResult GetUserByLogin(string login)
         {
 
             var user = _userService.GetUserByLogin(login);
             return Ok(user);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("BuyChapter")]
+        public IActionResult BuyChapter(BuyChapterViewModel model)
+        {
+            var userLogin = User.Claims.First().Value;
+            Console.WriteLine(userLogin);
+            var book = _bookService.GetBookById(model.BookId);
+            if (book.Result == null)
+            {
+                return Ok(new Response<bool>("Book not found", false, System.Net.HttpStatusCode.NotFound));
+            }
+            var res = _userService.BuyChapter(userLogin, model, book.Result);
+            return Ok(res);
         }
 
         private string GetToken(User user)
@@ -73,7 +90,7 @@ namespace NovelsRanboeTranslates.Controllers
                 issuer: _options.Issuer,
                 audience: _options.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(120)),
+                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
             );

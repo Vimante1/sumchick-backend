@@ -17,8 +17,4 @@
     <ProjectReference Include="..\NovelsRanboeTranslates.Services\NovelsRanboeTranslates.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
-
 </Project>

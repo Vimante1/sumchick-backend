@@ -86,7 +86,6 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             {
                 return false;
             }
-
         }
 
         public Response<bool> Delete(Book entity)

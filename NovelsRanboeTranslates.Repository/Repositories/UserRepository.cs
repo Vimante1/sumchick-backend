@@ -51,6 +51,21 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             }
         }
 
+        public bool ReplaceUserByLogin(string userLogin, User user)
+        {
+            try
+            {
+                var filter = Builders<User>.Filter.Eq("Login", userLogin);
+                var result = _collection.ReplaceOneAsync(filter, user);
+                if (result != null) { return true; }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public Response<bool> Delete(User entity)
         {
             throw new NotImplementedException();

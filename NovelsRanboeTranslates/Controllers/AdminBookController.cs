@@ -8,7 +8,7 @@ namespace NovelsRanboeTranslates.Controllers
 {
     [ApiController]
     [Route("AdminBook")]
-    //[Authorize("Admin")]
+    [Authorize("Admin")]
     public class AdminBookController : ControllerBase
     {
         private readonly IBookService _bookService;
