@@ -5,6 +5,7 @@ using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Repository.Repositories;
 using NovelsRanboeTranslates.Services.Interfraces;
 using NovelsRanboeTranslates.Services.Services;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace NovelsRanboeTranslates
@@ -24,6 +25,15 @@ namespace NovelsRanboeTranslates
                 });
             });
             builder.Services.AddSingleton<JWTSettings>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -52,15 +62,26 @@ namespace NovelsRanboeTranslates
 
             var app = builder.Build();
 
+
+            app.UseCors("AllowSpecificOrigins");
+            app.Use(async (context, next) =>
+            {
+                string token = context.Request.Cookies["token"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token).ToString();
+                }
+                await next.Invoke();
+            });
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
             }
-
             app.MapControllers();
-
             app.Run();
         }
     }

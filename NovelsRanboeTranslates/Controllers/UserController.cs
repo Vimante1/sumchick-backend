@@ -56,12 +56,33 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpGet]
         [Route("GetUserByLogin")]
+        [Authorize]
         public IActionResult GetUserByLogin(string login)
         {
-
-            var user = _userService.GetUserByLogin(login);
-            return Ok(user);
+            if (login == User.Claims.FirstOrDefault().Value)
+            {
+                var user = _userService.GetUserByLogin(login);
+                return Ok(user);
+            }
+            return Ok();
         }
+
+        [HttpGet]
+        [Route("GetUserByToken")]
+        [Authorize]
+        public IActionResult GetUserByToken()
+        {
+            try
+            {
+                var user = _userService.GetUserByLogin(User.Claims.FirstOrDefault().Value);
+                return Ok(user);
+            }
+            catch
+            {
+                return Ok(new Response<User>("Something wrong with token", null, System.Net.HttpStatusCode.NotFound));
+            }
+        }
+
 
         [HttpPost]
         [Authorize]
