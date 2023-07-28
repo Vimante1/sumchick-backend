@@ -1,4 +1,5 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.DTOs;
+using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 
 namespace NovelsRanboeTranslates.Services.Interfraces
@@ -7,7 +8,7 @@ namespace NovelsRanboeTranslates.Services.Interfraces
     {
         Response<bool> BuyChapter(string userLogin, BuyChapterViewModel model, Book book);
         Response<User> CreateNewUser(RegistrationViewModel user);
-        Response<User> GetUserByLogin(string login);
+        Response<UserDTO> GetUserByLogin(string login);
         Response<User> Login(AuthorizationViewModel user);
     }
 }

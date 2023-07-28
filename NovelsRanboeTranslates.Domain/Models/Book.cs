@@ -8,7 +8,6 @@ namespace NovelsRanboeTranslates.Domain.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }
-
         public string Author { get; set; }
         public string OriginalLanguage { get; set; }
         public string Genre { get; set; }

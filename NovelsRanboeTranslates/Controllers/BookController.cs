@@ -20,11 +20,19 @@ namespace NovelsRanboeTranslates.Controllers
         }
 
         [HttpGet]
-        [Route("GetCompilation")]
-        public IActionResult GetCompilation()
-        {
+        [Route("GetBestBooksByGenre")]
+        public IActionResult GetBestBooksByGenre() {
 
-            return Ok(_bookService.GetBooksCompilation());
+            var books = _bookService.GetBestBooksByGenre();
+            return Ok(books);
+        }
+        
+        [HttpGet]
+        [Route("GetLatestBooks")]
+        public IActionResult GetLatestBooks() {
+
+            var books = _bookService.GetLatestBooks();
+            return Ok(books);
         }
 
         [HttpGet]

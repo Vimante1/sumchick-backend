@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovelsRanboeTranslates", "N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovelsRanboeTranslates.Domain", "NovelsRanboeTranslates.Domain\NovelsRanboeTranslates.Domain.csproj", "{39D99801-C211-4659-93B6-C24AB0862BCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovelsRanboeTranslates.Repository", "NovelsRanboeTranslates.Repository\NovelsRanboeTranslates.Repository.csproj", "{DC9821D4-579C-47A8-B5B6-28C3AFAA048E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovelsRanboeTranslates.Repository", "NovelsRanboeTranslates.Repository\NovelsRanboeTranslates.Repository.csproj", "{DC9821D4-579C-47A8-B5B6-28C3AFAA048E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovelsRanboeTranslates.Services", "NovelsRanboeTranslates.Services\NovelsRanboeTranslates.Services.csproj", "{B6E52383-FF44-499D-B061-B5CA76BF8800}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovelsRanboeTranslates.Services", "NovelsRanboeTranslates.Services\NovelsRanboeTranslates.Services.csproj", "{B6E52383-FF44-499D-B061-B5CA76BF8800}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{9066A147-C9A9-4BCC-9530-C2532584D11C}"
 EndProject

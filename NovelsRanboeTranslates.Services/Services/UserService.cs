@@ -1,4 +1,5 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.DTOs;
+using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
@@ -33,10 +34,11 @@ namespace NovelsRanboeTranslates.Services.Services
             };
         }
 
-        public Response<User> GetUserByLogin(string login)
+        public Response<UserDTO> GetUserByLogin(string login)
         {
             var user = _repository.GetUserByLogin(login);
-            return user;
+            var response = new Response<UserDTO>("Comment", new UserDTO { _id = user.Result._id, Balance = user.Result.Balance, Role = user.Result.Role, FavoritesBookID = user.Result.FavoritesBookID, Login = user.Result.Login, Purchased = user.Result.Purchased }, System.Net.HttpStatusCode.OK);
+            return response;
         }
 
         public Response<User> Login(AuthorizationViewModel user)

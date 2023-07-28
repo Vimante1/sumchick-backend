@@ -30,7 +30,7 @@ namespace NovelsRanboeTranslates.Controllers
                     {
                         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
 
-                        var imagePath = Path.Combine("./images/", fileName);
+                        var imagePath = Path.Combine("D:/images/", fileName);
 
                         using (var stream = new FileStream(imagePath, FileMode.Create))
                         {

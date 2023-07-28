@@ -1,11 +1,9 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver.Core.Operations;
+﻿using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Lists;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
-using System.Net.WebSockets;
 
 namespace NovelsRanboeTranslates.Services.Services
 {
@@ -23,14 +21,32 @@ namespace NovelsRanboeTranslates.Services.Services
             Book NewBook = new Book(book.Title, book.Description, book.Author, book.OriginalLanguage, book.Genre, imagePath);
             return _repository.Create(NewBook);
         }
-        public Response<List<List<Book>>> GetBooksCompilation()
+        public Response<List<SimpleBookDTO>> GetBestBooksByGenre()
         {
-            List<List<Book>> compilation = new List<List<Book>>();
-            var genres = new Genres().GetList();
-            compilation.Add(_repository.GetBestBooksByGenre(genres));
-            compilation.Add(_repository.GetLatestBooks());
-            return new Response<List<List<Book>>>("1.BestBooksByGenre 2.LatestBooks", compilation, System.Net.HttpStatusCode.OK);
+            try
+            {
+                var genres = new Genres().GetList();
+                var books = _repository.GetBestBooksByGenre(genres);
+                return new Response<List<SimpleBookDTO>>("Correct", books, System.Net.HttpStatusCode.OK);
+            }
+            catch
+            {
+                return new Response<List<SimpleBookDTO>>("Something wrong with get from DB", null, System.Net.HttpStatusCode.BadRequest);
+            }
         }
+        public Response<List<SimpleBookDTO>> GetLatestBooks()
+        {
+            try
+            {
+                var books = _repository.GetLatestBooks();
+                return new Response<List<SimpleBookDTO>>("Correct", books, System.Net.HttpStatusCode.OK);
+            }
+            catch
+            {
+                return new Response<List<SimpleBookDTO>>("Something wrong with get from DB", null, System.Net.HttpStatusCode.BadRequest);
+            }
+        }
+
         public Response<Book> GetBookById(int bookId)
         {
             var book = _repository.GetBookById(bookId);

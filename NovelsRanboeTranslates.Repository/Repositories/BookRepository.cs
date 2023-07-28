@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 
@@ -34,14 +35,32 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Book> GetBestBooksByGenre(List<string> genres)
+        public List<SimpleBookDTO> GetBestBooksByGenre(List<string> genres)
         {
-            var bestBooks = new List<Book>();
+            var bestBooks = new List<SimpleBookDTO>();
             foreach (var genre in genres)
             {
                 var filter = Builders<Book>.Filter.Eq("Genre", genre);
                 var sort = Builders<Book>.Sort.Descending("LikedPercent");
-                var book = _collection.Find(filter).Sort(sort).Limit(1).FirstOrDefault();
+                //var book = _collection.Find(filter).Sort(sort).Limit(1).FirstOrDefault();
+
+                var book = _collection.Find(filter)
+                              .Project(b => new SimpleBookDTO
+                              {
+                                  _id = b._id,
+                                  Title = b.Title,
+                                  Description = b.Description,
+                                  ImagePath = b.ImagePath,
+                                  Author = b.Author,
+                                  OriginalLanguage = b.OriginalLanguage,
+                                  Views = b.Views,
+                                  Genre = b.Genre,
+                                  LikedPercent = b.LikedPercent,
+                              })
+                              .Sort(sort)
+                              .Limit(1)
+                              .FirstOrDefault();
+
                 if (book != null)
                 {
                     bestBooks.Add(book);
@@ -50,12 +69,23 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             return bestBooks;
         }
 
-        public List<Book> GetLatestBooks()
+        public List<SimpleBookDTO> GetLatestBooks()
         {
             var sort = Builders<Book>.Sort.Descending("Created");
-            var latestBooks = _collection.Find(_ => true).Sort(sort).Limit(15).ToList();
+            var latestBooks = _collection.Find(_ => true).Project(b => new SimpleBookDTO
+            {
+                _id = b._id,
+                Title = b.Title,
+                Description = b.Description,
+                ImagePath = b.ImagePath,
+                Author = b.Author,
+                OriginalLanguage = b.OriginalLanguage,
+                Views = b.Views,
+                Genre = b.Genre,
+                LikedPercent = b.LikedPercent,
+            })
+                .Sort(sort).Limit(20).ToList();
             return latestBooks;
-
         }
 
         public Book GetBookById(int bookId)
