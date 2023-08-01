@@ -83,23 +83,6 @@ namespace NovelsRanboeTranslates.Controllers
             }
         }
 
-
-        [HttpPost]
-        [Authorize]
-        [Route("BuyChapter")]
-        public IActionResult BuyChapter(BuyChapterViewModel model)
-        {
-            var userLogin = User.Claims.First().Value;
-            Console.WriteLine(userLogin);
-            var book = _bookService.GetBookById(model.BookId);
-            if (book.Result == null)
-            {
-                return Ok(new Response<bool>("Book not found", false, System.Net.HttpStatusCode.NotFound));
-            }
-            var res = _userService.BuyChapter(userLogin, model, book.Result);
-            return Ok(res);
-        }
-
         private string GetToken(User user)
         {
             List<Claim> claims = new();

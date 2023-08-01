@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using NovelsRanboeTranslates.Domain.Models;
+using NovelsRanboeTranslates.Repository;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Repository.Repositories;
 using NovelsRanboeTranslates.Services.Interfraces;
@@ -15,6 +16,18 @@ namespace NovelsRanboeTranslates
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<IMongoDbSettings>(sp =>
+            {
+                var conf = builder.Configuration.GetSection("MongoDbConnection");
+                // Replace with your actual MongoDB connection string and database name
+                return new MongoDbSettings
+                {
+                    ConnectionString = conf.GetValue<string>("ConnectionString"),
+                    DatabaseName = conf.GetValue<string>("DatabaseName")
+                };
+            });
+
+
 
             builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWTSettings"));
             builder.Services.AddAuthorization(options =>
@@ -58,6 +71,8 @@ namespace NovelsRanboeTranslates
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IBookService, BookService>();
+            builder.Services.AddScoped<IChapterService, ChapterService>();
+            builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();

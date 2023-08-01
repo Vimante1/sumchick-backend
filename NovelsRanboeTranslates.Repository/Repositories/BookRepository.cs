@@ -1,21 +1,12 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using NovelsRanboeTranslates.Domain.DTOs;
+﻿using MongoDB.Driver;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
-    public class BookRepository : IBookRepository
+    public class BookRepository : BaseRepository<Book>, IBookRepository
     {
-        private readonly IMongoCollection<Book> _collection;
-
-        public BookRepository()
-        {
-            var client = new MongoClient("mongodb://root:example@132.226.192.36:27017");
-            var database = client.GetDatabase("Translates");
-            _collection = database.GetCollection<Book>("Book");
-        }
+        public BookRepository(IMongoDbSettings settings) : base(settings, "Book") { }
 
         public Response<bool> Create(Book entity)
         {
@@ -30,61 +21,25 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             };
         }
 
-        public Response<List<Book>> GetAll()
+        public async Task<List<Book>> GetBestBooksByGenreAsync(List<string> genres)
         {
-            throw new NotImplementedException();
-        }
+            var filter = Builders<Book>.Filter.In("Genre", genres);
+            var sort = Builders<Book>.Sort.Descending("LikedPercent");
 
-        public List<SimpleBookDTO> GetBestBooksByGenre(List<string> genres)
-        {
-            var bestBooks = new List<SimpleBookDTO>();
-            foreach (var genre in genres)
-            {
-                var filter = Builders<Book>.Filter.Eq("Genre", genre);
-                var sort = Builders<Book>.Sort.Descending("LikedPercent");
-                //var book = _collection.Find(filter).Sort(sort).Limit(1).FirstOrDefault();
+            var bestBooks = await _collection.Find(filter)
+                                             .Sort(sort)
+                                             .ToListAsync();
 
-                var book = _collection.Find(filter)
-                              .Project(b => new SimpleBookDTO
-                              {
-                                  _id = b._id,
-                                  Title = b.Title,
-                                  Description = b.Description,
-                                  ImagePath = b.ImagePath,
-                                  Author = b.Author,
-                                  OriginalLanguage = b.OriginalLanguage,
-                                  Views = b.Views,
-                                  Genre = b.Genre,
-                                  LikedPercent = b.LikedPercent,
-                              })
-                              .Sort(sort)
-                              .Limit(1)
-                              .FirstOrDefault();
-
-                if (book != null)
-                {
-                    bestBooks.Add(book);
-                }
-            }
             return bestBooks;
         }
 
-        public List<SimpleBookDTO> GetLatestBooks()
+        public async Task<List<Book>> GetLatestBooksAsync()
         {
             var sort = Builders<Book>.Sort.Descending("Created");
-            var latestBooks = _collection.Find(_ => true).Project(b => new SimpleBookDTO
-            {
-                _id = b._id,
-                Title = b.Title,
-                Description = b.Description,
-                ImagePath = b.ImagePath,
-                Author = b.Author,
-                OriginalLanguage = b.OriginalLanguage,
-                Views = b.Views,
-                Genre = b.Genre,
-                LikedPercent = b.LikedPercent,
-            })
-                .Sort(sort).Limit(20).ToList();
+            var latestBooks = await _collection.Find(_ => true)
+                                                .Sort(sort)
+                                                .Limit(20)
+                                                .ToListAsync();
             return latestBooks;
         }
 

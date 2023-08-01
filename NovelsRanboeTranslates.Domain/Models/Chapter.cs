@@ -1,19 +1,27 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-
-namespace NovelsRanboeTranslates.Domain.Models
+﻿namespace NovelsRanboeTranslates.Domain.Models
 {
+    public class Chapters
+    {
+        public int _id { get; set; }
+        public List<Chapter> Chapter { get; set; }
+        public Chapters(int id)
+        {
+            _id = id;
+            Chapter = new List<Chapter>();
+        }
+    }
+
     public class Chapter
     {
-        public int ID { get; set; }
+        public int ChapterId { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public bool HasPrice { get; set; }
 
-        public Chapter(int id, string title, string text, double price)
+        public Chapter(int chapterId, string title, string text, decimal price)
         {
-            ID = id; 
+            ChapterId = chapterId;
             Title = title;
             Text = text;
             Price = price;

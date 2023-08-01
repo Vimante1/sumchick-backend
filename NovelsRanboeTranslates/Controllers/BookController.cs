@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using MongoDB.Bson;
-using NovelsRanboeTranslates.Domain.Models;
-using NovelsRanboeTranslates.Domain.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
 using NovelsRanboeTranslates.Services.Interfraces;
 
 namespace NovelsRanboeTranslates.Controllers
@@ -13,6 +8,7 @@ namespace NovelsRanboeTranslates.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
+        private readonly IChapterService _chapterService;
 
         public BookController(IBookService bookService)
         {
@@ -21,15 +17,16 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpGet]
         [Route("GetBestBooksByGenre")]
-        public IActionResult GetBestBooksByGenre() {
-
+        public IActionResult GetBestBooksByGenre()
+        {
             var books = _bookService.GetBestBooksByGenre();
             return Ok(books);
         }
-        
+
         [HttpGet]
         [Route("GetLatestBooks")]
-        public IActionResult GetLatestBooks() {
+        public IActionResult GetLatestBooks()
+        {
 
             var books = _bookService.GetLatestBooks();
             return Ok(books);
@@ -41,19 +38,5 @@ namespace NovelsRanboeTranslates.Controllers
         {
             return Ok(_bookService.GetBookById(bookId));
         }
-
-        [HttpPost]
-        [Route("AddCommentToBook")]
-        public IActionResult AddCommentToBook(int bookId, Comment comment)
-        {
-            if (bookId != 0 && comment != null)
-            {
-                var result = _bookService.AddCommentToBook(bookId, comment);
-                return Ok(result);
-            }
-            return Ok(new Response<bool>("input id 0", false, System.Net.HttpStatusCode.NoContent));
-        }
-
-        
     }
 }

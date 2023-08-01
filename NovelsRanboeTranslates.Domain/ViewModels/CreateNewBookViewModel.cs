@@ -18,6 +18,6 @@ namespace NovelsRanboeTranslates.Domain.ViewModels
         [Required(ErrorMessage = "Original language is a required field")]
         public string OriginalLanguage{ get; set; }
         [Required(ErrorMessage = "Genre is a required field")]
-        public string Genre{ get; set; }
+        public List<string> Genre{ get; set; }
     }
 }

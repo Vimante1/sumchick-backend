@@ -8,14 +8,16 @@ namespace NovelsRanboeTranslates.Controllers
 {
     [ApiController]
     [Route("AdminBook")]
-    [Authorize("Admin")]
+    //[Authorize("Admin")]
     public class AdminBookController : ControllerBase
     {
         private readonly IBookService _bookService;
+        private readonly IChapterService _chapterService;
 
-        public AdminBookController(IBookService bookService)
+        public AdminBookController(IBookService bookService, IChapterService chapterService)
         {
             _bookService = bookService;
+            _chapterService = chapterService;
         }
 
         [HttpPost]
@@ -53,15 +55,11 @@ namespace NovelsRanboeTranslates.Controllers
         }
 
         [HttpPost]
-        [Route("AddChapter")]
-        public IActionResult AddChapter(int bookId, [FromBody] AddChapterViewModel model)
+        [Route("CreateChapter")]
+        public IActionResult CreateChapter(int bookId, Chapter chapter)
         {
-            if (model != null && bookId != 0 && ModelState.IsValid)
-            {
-                var result = _bookService.AddChapterToBook(bookId, model);
-                return Ok(result);
-            }
-            return Ok(new Response<bool>("input id 0", false, System.Net.HttpStatusCode.NoContent)) ;
+            var result = _chapterService.AddChapter(bookId, chapter);
+            return Ok(result);
         }
     }
 }

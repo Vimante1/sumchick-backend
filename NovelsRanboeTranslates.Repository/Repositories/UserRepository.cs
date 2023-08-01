@@ -1,21 +1,13 @@
-﻿using Microsoft.VisualBasic;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly IMongoCollection<User> _collection;
 
-        public UserRepository()
-        {
-            var client = new MongoClient("mongodb://root:example@132.226.192.36:27017");
-            var database = client.GetDatabase("Translates");
-            _collection = database.GetCollection<User>("User");
-        }
-
+        public UserRepository(IMongoDbSettings settings) : base(settings, "User") { }
         public Response<bool> Create(User entity)
         {
             try
@@ -44,7 +36,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
                     return new Response<User>("UserNotFound", null, System.Net.HttpStatusCode.NotFound);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Something wrong with find in user repository GetUserByLogin" + ex);
                 return new Response<User>("UserNotFound", null, System.Net.HttpStatusCode.NotFound);
@@ -67,11 +59,6 @@ namespace NovelsRanboeTranslates.Repository.Repositories
         }
 
         public Response<bool> Delete(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Response<List<User>> GetAll()
         {
             throw new NotImplementedException();
         }
