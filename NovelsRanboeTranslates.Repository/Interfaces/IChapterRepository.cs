@@ -1,4 +1,5 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.DTOs;
+using NovelsRanboeTranslates.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
     {
         Task<bool> CreateChaptersAsync(Chapters chapters);
         public Task<Chapters> GetChaptersAsync(int id);
+        Task<ChaptersDTO> GetChaptersDTOAsync(int id);
         Task<bool> UpdateChaptersAsync(Chapters chapters);
     }
 }

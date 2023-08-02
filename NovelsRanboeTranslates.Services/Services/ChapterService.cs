@@ -1,11 +1,7 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.DTOs;
+using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NovelsRanboeTranslates.Services.Services
 {
@@ -34,6 +30,20 @@ namespace NovelsRanboeTranslates.Services.Services
             newChapters.Chapter.Add(chapter);
             _chapterRepository.CreateChaptersAsync(newChapters);
             return new Response<bool>("Chapters added, chapter added", true, System.Net.HttpStatusCode.OK);
+        }
+
+        public async Task<Response<ChaptersDTO>> GetChaptersDTOAsync(int bookId)
+        {
+            var chapters = await _chapterRepository.GetChaptersDTOAsync(bookId);
+
+            if (chapters != null)
+            {
+                return new Response<ChaptersDTO>("Correct", chapters, System.Net.HttpStatusCode.OK);
+            }
+            else
+            {
+                return new Response<ChaptersDTO>("ChaptersNotFound", null, System.Net.HttpStatusCode.NotFound);
+            }
         }
     }
 }

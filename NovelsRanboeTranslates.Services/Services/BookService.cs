@@ -1,5 +1,4 @@
-﻿using NovelsRanboeTranslates.Domain.DTOs;
-using NovelsRanboeTranslates.Domain.Lists;
+﻿using NovelsRanboeTranslates.Domain.Lists;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
@@ -47,9 +46,10 @@ namespace NovelsRanboeTranslates.Services.Services
             }
         }
 
-        public Response<Book> GetBookById(int bookId)
+        public async Task<Response<Book>> GetBookByIdAsync(int bookId)
         {
-            var book = _repository.GetBookById(bookId);
+            var book = await _repository.GetBookByIdAsync(bookId);
+
             if (book != null)
             {
                 return new Response<Book>("Correct", book, System.Net.HttpStatusCode.OK);
@@ -57,7 +57,7 @@ namespace NovelsRanboeTranslates.Services.Services
             return new Response<Book>("BookNotFound", null, System.Net.HttpStatusCode.NotFound);
         }
 
-       
+
     }
 
 }

@@ -43,14 +43,13 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             return latestBooks;
         }
 
-        public Book GetBookById(int bookId)
+        public async Task<Book> GetBookByIdAsync(int bookId)
         {
             try
             {
                 var filter = Builders<Book>.Filter.Eq("_id", bookId);
-                var book = _collection.Find(filter).FirstOrDefault();
-                if (book != null) return book;
-                else return null;
+                var book = await _collection.Find(filter).FirstOrDefaultAsync();
+                return book;
             }
             catch
             {

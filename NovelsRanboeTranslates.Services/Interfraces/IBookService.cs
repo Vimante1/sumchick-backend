@@ -7,7 +7,7 @@ namespace NovelsRanboeTranslates.Services.Interfraces
     {
         Response<bool> CreateNewBook(CreateNewBookViewModel Book, string ImagePath);
         Response<List<Book>> GetLatestBooks();
-        Response<Book> GetBookById(int bookId);
         Response<List<Book>> GetBestBooksByGenre();
+        Task<Response<Book>> GetBookByIdAsync(int bookId);
     }
 }

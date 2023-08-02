@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using System;
@@ -58,6 +59,22 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             return chapters;
             }
             catch { return null; }
+        }
+        public async Task<ChaptersDTO> GetChaptersDTOAsync(int id)
+        {
+            try
+            {
+                var filter = Builders<Chapters>.Filter.Eq("_id", id);
+                var chapters = await _collection.Find(filter).FirstOrDefaultAsync();
+
+                if (chapters == null) return null;
+                var chapterDtoList = chapters.Chapter.Select(chapter => new ChapterDTO(chapter)).ToList();
+                return new ChaptersDTO(id, chapterDtoList);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

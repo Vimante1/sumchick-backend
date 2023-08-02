@@ -10,9 +10,10 @@ namespace NovelsRanboeTranslates.Controllers
         private readonly IBookService _bookService;
         private readonly IChapterService _chapterService;
 
-        public BookController(IBookService bookService)
+        public BookController(IBookService bookService, IChapterService chapterService)
         {
             _bookService = bookService;
+            _chapterService = chapterService;
         }
 
         [HttpGet]
@@ -34,9 +35,34 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpGet]
         [Route("GetBookById")]
-        public IActionResult GetBookById(int bookId)
+        public async Task<IActionResult> GetBookById(int bookId)
         {
-            return Ok(_bookService.GetBookById(bookId));
+            var result = await _bookService.GetBookByIdAsync(bookId);
+
+            if (result != null )
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Route("GetChaptersById")]
+        public async Task<IActionResult> GetChaptersById(int bookId)
+        {
+            var result = await _chapterService.GetChaptersDTOAsync(bookId);
+
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
