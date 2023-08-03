@@ -22,7 +22,7 @@ namespace NovelsRanboeTranslates.Services.Services
                 var chapterCount = chapters.Chapter.Count + 1;
                 chapter.ChapterId = chapterCount;
                 chapters.Chapter.Add(chapter);
-                 _chapterRepository.UpdateChaptersAsync(chapters);
+                _chapterRepository.UpdateChaptersAsync(chapters);
                 return new Response<bool>("Chapter correct added", true, System.Net.HttpStatusCode.OK);
             }
             Chapters newChapters = new Chapters(bookId);

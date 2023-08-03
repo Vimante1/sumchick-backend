@@ -57,6 +57,16 @@ namespace NovelsRanboeTranslates.Services.Services
             return new Response<Book>("BookNotFound", null, System.Net.HttpStatusCode.NotFound);
         }
 
+        public async Task<bool> UpdateLikedPercent(int bookId, int likedPercent)
+        {
+            var book = await _repository.GetBookByIdAsync(bookId);
+            if (book != null)
+            {
+                await _repository.UpdateLikedPercentBookAsync(book, likedPercent);
+                return true;
+            }
+            return false;
+        } 
 
     }
 

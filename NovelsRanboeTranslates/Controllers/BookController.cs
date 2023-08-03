@@ -91,6 +91,11 @@ namespace NovelsRanboeTranslates.Controllers
             var result = _commentsService.AddComment(bookId, comment);
             if (result != null)
             {
+                var comments = _commentsService.GetCommentsAsync(bookId).Result;
+                int totalComments = comments.Result.Comment.Count;
+                int likedCount = comments.Result.Comment.Count(c => c.Liked);
+                double likedPercentage = likedCount / (double)totalComments * 100;
+                _bookService.UpdateLikedPercent(bookId, (int)likedPercentage);
                 return Ok(result);
             }
             else

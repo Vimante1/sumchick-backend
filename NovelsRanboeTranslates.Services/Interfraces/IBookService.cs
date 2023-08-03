@@ -9,5 +9,6 @@ namespace NovelsRanboeTranslates.Services.Interfraces
         Response<List<Book>> GetLatestBooks();
         Response<List<Book>> GetBestBooksByGenre();
         Task<Response<Book>> GetBookByIdAsync(int bookId);
+        Task<bool> UpdateLikedPercent(int bookId, int likedPercent);
     }
 }

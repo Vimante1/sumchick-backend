@@ -1,13 +1,6 @@
-﻿using NovelsRanboeTranslates.Domain.DTOs;
-using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
-using NovelsRanboeTranslates.Repository.Repositories;
 using NovelsRanboeTranslates.Services.Interfraces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NovelsRanboeTranslates.Services.Services
 {

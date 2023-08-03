@@ -57,6 +57,19 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             }
         }
 
+        public async Task<bool> UpdateLikedPercentBookAsync(Book book, int likedPercent)
+        {
+            try
+            {
+                var filter = Builders<Book>.Filter.Eq(b => b._id, book._id);
+                var update = Builders<Book>.Update.Set(u => u.LikedPercent, likedPercent);
+                await _collection.UpdateOneAsync(filter, update);
+                return true;
+            }
+            catch { return false; }
+        }
+
+
         public bool ReplaceBookById(int bookId, Book newBook)
         {
             try

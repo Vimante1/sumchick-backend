@@ -9,5 +9,6 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
         Task<List<Book>> GetBestBooksByGenreAsync(List<string> genres);
         Task<List<Book>> GetLatestBooksAsync();
         Task<Book> GetBookByIdAsync(int bookId);
+        Task<bool> UpdateLikedPercentBookAsync(Book book, int likedPercent);
     }
 }
