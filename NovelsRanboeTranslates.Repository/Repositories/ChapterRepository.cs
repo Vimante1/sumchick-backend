@@ -41,7 +41,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
         {
             try
             {
-                _collection.InsertOneAsync(chapters);
+                await _collection.InsertOneAsync(chapters);
                 return true;
             }
             catch
@@ -54,9 +54,9 @@ namespace NovelsRanboeTranslates.Repository.Repositories
         {
             try
             {
-            var filter = Builders<Chapters>.Filter.Eq("_id", id);
-            var chapters = await _collection.Find(filter).FirstOrDefaultAsync();
-            return chapters;
+                var filter = Builders<Chapters>.Filter.Eq("_id", id);
+                var chapters = await _collection.Find(filter).FirstOrDefaultAsync();
+                return chapters;
             }
             catch { return null; }
         }

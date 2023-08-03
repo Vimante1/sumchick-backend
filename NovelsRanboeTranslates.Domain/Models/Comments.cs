@@ -3,8 +3,12 @@
     public class Comments
     {
         public int _id { get; set; }
-
-        public Comment Comment { get; set; }
+        public List<Comment> Comment { get; set; }
+        public Comments(int id)
+        {
+            _id = id;
+            Comment = new List<Comment>();
+        }
     }
 
 
@@ -17,7 +21,7 @@
         public Comment(string authorComment, string text, bool liked)
         {
             AuthorComment = authorComment;
-            Text = text;
+            Text = text; 
             Liked = liked;
         }
     }

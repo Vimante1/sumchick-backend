@@ -10,9 +10,9 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
 {
     public interface IChapterRepository : IBaseRepository<Chapters>
     {
-        Task<bool> CreateChaptersAsync(Chapters chapters);
+        public Task<bool> CreateChaptersAsync(Chapters chapters);
         public Task<Chapters> GetChaptersAsync(int id);
-        Task<ChaptersDTO> GetChaptersDTOAsync(int id);
-        Task<bool> UpdateChaptersAsync(Chapters chapters);
+        public Task<ChaptersDTO> GetChaptersDTOAsync(int id);
+        public Task<bool> UpdateChaptersAsync(Chapters chapters);
     }
 }

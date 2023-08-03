@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Services.Interfraces;
 
 namespace NovelsRanboeTranslates.Controllers
@@ -7,13 +8,15 @@ namespace NovelsRanboeTranslates.Controllers
     [Route("Book")]
     public class BookController : ControllerBase
     {
+        private readonly ICommentsService _commentsService;
         private readonly IBookService _bookService;
         private readonly IChapterService _chapterService;
 
-        public BookController(IBookService bookService, IChapterService chapterService)
+        public BookController(IBookService bookService, IChapterService chapterService, ICommentsService commentsService)
         {
             _bookService = bookService;
             _chapterService = chapterService;
+            _commentsService = commentsService;
         }
 
         [HttpGet]
@@ -39,7 +42,7 @@ namespace NovelsRanboeTranslates.Controllers
         {
             var result = await _bookService.GetBookByIdAsync(bookId);
 
-            if (result != null )
+            if (result != null)
             {
                 return Ok(result);
             }
@@ -55,6 +58,37 @@ namespace NovelsRanboeTranslates.Controllers
         {
             var result = await _chapterService.GetChaptersDTOAsync(bookId);
 
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetCommentsById")]
+        public async Task<IActionResult> GetCommentsById(int bookId)
+        {
+            var result = await _commentsService.GetCommentsAsync(bookId);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [Route("AddComments")]
+        public IActionResult AddComments(int bookId, Comment comment)
+        {
+            var result = _commentsService.AddComment(bookId, comment);
             if (result != null)
             {
                 return Ok(result);

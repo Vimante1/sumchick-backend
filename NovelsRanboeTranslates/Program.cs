@@ -69,10 +69,12 @@ namespace NovelsRanboeTranslates
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IBookService, BookService>();
+            builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IChapterService, ChapterService>();
             builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
+            builder.Services.AddScoped<ICommentsService, CommentsService>();
+            builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
