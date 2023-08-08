@@ -8,7 +8,7 @@ namespace NovelsRanboeTranslates.Domain.DTOs
         public ObjectId _id { get; set; }
         public string Login { get; set; }
         public string Role { get; set; }
-        public double Balance { get; set; }
+        public decimal Balance { get; set; }
         public List<Purchased> Purchased { get; set; }
         public List<string> FavoritesBookID { get; set; }
     }

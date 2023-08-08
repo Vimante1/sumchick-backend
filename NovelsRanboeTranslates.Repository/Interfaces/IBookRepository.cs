@@ -1,5 +1,4 @@
-﻿using NovelsRanboeTranslates.Domain.DTOs;
-using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.Models;
 
 namespace NovelsRanboeTranslates.Repository.Interfaces
 {

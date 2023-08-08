@@ -17,12 +17,14 @@ namespace NovelsRanboeTranslates.Controllers
     {
         private readonly IUserService _userService;
         private readonly IBookService _bookService;
+        private readonly IChapterService _chapterService;
         private readonly JWTSettings _options;
-        public UserController(IUserService userService, IOptions<JWTSettings> options, IBookService bookService)
+        public UserController(IUserService userService, IOptions<JWTSettings> options, IBookService bookService, IChapterService chapterService)
         {
             _userService = userService;
             _bookService = bookService;
             _options = options.Value;
+            _chapterService = chapterService;
         }
 
         [HttpPost]
@@ -81,6 +83,30 @@ namespace NovelsRanboeTranslates.Controllers
             {
                 return Ok(new Response<User>("Something wrong with token", null, System.Net.HttpStatusCode.NotFound));
             }
+        }
+
+        [HttpPut]
+        [Route("BuyChapter")]
+        public async Task<IActionResult> BuyChapter(BuyChapterViewModel model)
+        {
+            var responseBook = await _bookService.GetBookByIdAsync(model.BookId);
+            if (responseBook.Result == null)
+            {
+                return Ok(new Response<bool>(responseBook.Comment, false, System.Net.HttpStatusCode.NotFound));
+            }
+            var book = responseBook.Result;
+            var chapters = await _chapterService.GetChaptersDTOAsync(model.BookId);
+            if (chapters == null)
+            {
+                return Ok(new Response<bool>(chapters.Comment, false, System.Net.HttpStatusCode.NotFound));
+            }
+            var existingChapter = chapters.Result.Chapter.FirstOrDefault(c => c.ChapterId == model.ChapterId);
+            if (existingChapter == null)
+            {
+                return Ok(new Response<bool>("Chapter not found", false, System.Net.HttpStatusCode.NotFound));
+            }
+            var result = _userService.AddPurchased(model, User.Claims.FirstOrDefault().Value, existingChapter.Price);
+            return Ok(result);
         }
 
         private string GetToken(User user)

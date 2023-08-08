@@ -3,6 +3,7 @@ using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
+using ZstdSharp.Unsafe;
 
 namespace NovelsRanboeTranslates.Services.Services
 {
@@ -41,6 +42,12 @@ namespace NovelsRanboeTranslates.Services.Services
             return response;
         }
 
+        public Response<User> GetBaseUserByLogin(string login)
+        {
+            var user = _repository.GetUserByLogin(login);
+            return user;
+        }
+
         public Response<User> Login(AuthorizationViewModel user)
         {
             try
@@ -64,6 +71,28 @@ namespace NovelsRanboeTranslates.Services.Services
                 Console.WriteLine("Something wrong in user service with login" + ex);
                 return new Response<User>("Something wrong in user service with login ", null, System.Net.HttpStatusCode.Unauthorized);
             }
+        }
+
+        public Response<bool> AddPurchased(BuyChapterViewModel model, string userName, decimal chapterPrice)
+        {
+            var user = _repository.GetUserByLogin(userName);
+            if (user.Result == null)
+            {
+                return new Response<bool>(user.Comment, false, System.Net.HttpStatusCode.NotFound);
+            }
+            var existingPurchase = user.Result.Purchased.FirstOrDefault(p => p.BookID == model.BookId);
+            if (existingPurchase != null)
+            {
+                existingPurchase.ChapterID.Add(model.ChapterId);
+            }
+            else
+            {
+                user.Result.Purchased.Add(new Purchased(model.BookId, model.ChapterId));
+            }
+            user.Result.Balance -= chapterPrice;
+            var result = _repository.ReplaceUserByLogin(userName, user.Result);
+            return new Response<bool>("Correct", result, System.Net.HttpStatusCode.OK);
+
         }
     }
 }

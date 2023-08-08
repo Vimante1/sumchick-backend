@@ -66,7 +66,7 @@ namespace NovelsRanboeTranslates.Services.Services
                 return true;
             }
             return false;
-        } 
+        }
 
     }
 
