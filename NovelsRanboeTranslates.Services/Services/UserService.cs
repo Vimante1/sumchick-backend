@@ -80,6 +80,10 @@ namespace NovelsRanboeTranslates.Services.Services
             {
                 return new Response<bool>(user.Comment, false, System.Net.HttpStatusCode.NotFound);
             }
+            if(user.Result.Balance < chapterPrice)
+            {
+                return new Response<bool>("Not enough money", false, System.Net.HttpStatusCode.NotFound);
+            }
             var existingPurchase = user.Result.Purchased.FirstOrDefault(p => p.BookID == model.BookId);
             if (existingPurchase != null)
             {

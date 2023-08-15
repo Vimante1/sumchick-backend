@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using NovelsRanboeTranslates.Domain.Models;
+using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
 
 namespace NovelsRanboeTranslates.Controllers
@@ -11,12 +14,14 @@ namespace NovelsRanboeTranslates.Controllers
         private readonly ICommentsService _commentsService;
         private readonly IBookService _bookService;
         private readonly IChapterService _chapterService;
+        private readonly IUserService _userService;
 
-        public BookController(IBookService bookService, IChapterService chapterService, ICommentsService commentsService)
+        public BookController(IBookService bookService, IChapterService chapterService, ICommentsService commentsService, IUserService userService)
         {
             _bookService = bookService;
             _chapterService = chapterService;
             _commentsService = commentsService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -68,10 +73,9 @@ namespace NovelsRanboeTranslates.Controllers
             }
         }
 
-
         [HttpGet]
-        [Route("GetCommentsById")]
-        public async Task<IActionResult> GetCommentsById(int bookId)
+        [Route("GetCommentsByBookId")]
+        public async Task<IActionResult> GetCommentsByBookId(int bookId)
         {
             var result = await _commentsService.GetCommentsAsync(bookId);
             if (result != null)
@@ -86,21 +90,57 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpPost]
         [Route("AddComments")]
-        public IActionResult AddComments(int bookId, Comment comment)
+        [Authorize]
+        public IActionResult AddComments(CommentViewModel comment)
         {
-            var result = _commentsService.AddComment(bookId, comment);
+            var newComment = new Comment(User.Claims.FirstOrDefault().Value, comment.Text, comment.Liked);
+            var result = _commentsService.AddComment(comment.BookId, newComment);
             if (result != null)
             {
-                var comments = _commentsService.GetCommentsAsync(bookId).Result;
+                var comments = _commentsService.GetCommentsAsync(comment.BookId).Result;
                 int totalComments = comments.Result.Comment.Count;
                 int likedCount = comments.Result.Comment.Count(c => c.Liked);
                 double likedPercentage = likedCount / (double)totalComments * 100;
-                _bookService.UpdateLikedPercent(bookId, (int)likedPercentage);
+                _bookService.UpdateLikedPercent(comment.BookId, (int)likedPercentage);
                 return Ok(result);
             }
             else
             {
                 return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [Route("GetChapterToRead")]
+        public async Task<IActionResult> GetChapterToRead(ChapterToReadViewModel model)
+        {
+            var chapters = await _chapterService.GetChaptersAsync(model.BookId);
+            var chapterContain = chapters.Result.Chapter.Find(c => c.ChapterId == model.ChapterId);
+            if (chapters == null || chapterContain == null)
+            {
+                return Ok(new Response<Chapters>("Chapter not found", null, System.Net.HttpStatusCode.NotFound));
+            }
+            if (chapterContain.HasPrice)
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Ok(new Response<Chapter>("Unauthorize", null, System.Net.HttpStatusCode.Unauthorized));
+                }
+                var user = _userService.GetUserByLogin(User.Claims.FirstOrDefault().Value);
+                var purchasedBook = user.Result.Purchased.Find(u => u.BookID == model.BookId);
+                var purchasedChapter = purchasedBook.ChapterID.Contains(model.ChapterId);
+                if (purchasedChapter)
+                {
+                    return Ok(new Response<Chapter>("correct", chapterContain, System.Net.HttpStatusCode.OK));
+                }
+                else
+                {
+                    return Ok(new Response<Chapter>("Not find in purchased", null, System.Net.HttpStatusCode.NotFound));
+                }
+            }
+            else
+            {
+                return Ok(new Response<Chapter>("correct", chapterContain, System.Net.HttpStatusCode.OK));
             }
         }
     }

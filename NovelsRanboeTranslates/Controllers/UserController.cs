@@ -87,6 +87,7 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpPut]
         [Route("BuyChapter")]
+        [Authorize]
         public async Task<IActionResult> BuyChapter(BuyChapterViewModel model)
         {
             var responseBook = await _bookService.GetBookByIdAsync(model.BookId);
