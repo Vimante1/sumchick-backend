@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
@@ -7,7 +8,7 @@ namespace NovelsRanboeTranslates.Controllers
 {
     [ApiController]
     [Route("AdminBook")]
-    //[Authorize("Admin")]
+    [Authorize("Admin")]
     public class AdminBookController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -21,21 +22,21 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpPost]
         [Route("CreateNewBook")]
-        public IActionResult CreateNewBook([FromForm] CreateNewBookViewModel book, IFormFile image)
+        public IActionResult CreateNewBook([FromForm] CreateNewBookViewModel book)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (image != null && image.Length > 0)
+                    if (book.Image != null && book.Image.Length > 0)
                     {
-                        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+                        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(book.Image.FileName)}";
 
                         var imagePath = Path.Combine("D:/images/", fileName);
 
                         using (var stream = new FileStream(imagePath, FileMode.Create))
                         {
-                            image.CopyTo(stream);
+                            book.Image.CopyTo(stream);
                         }
                         return Ok(_bookService.CreateNewBook(book, imagePath));
                     }
@@ -57,6 +58,7 @@ namespace NovelsRanboeTranslates.Controllers
         [Route("CreateChapter")]
         public IActionResult CreateChapter(int bookId, Chapter chapter)
         {
+            if (!ModelState.IsValid) return Ok(ModelState);
             var result = _chapterService.AddChapter(bookId, chapter);
             return Ok(result);
         }

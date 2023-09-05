@@ -1,4 +1,5 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.DTOs;
+using NovelsRanboeTranslates.Domain.Models;
 
 namespace NovelsRanboeTranslates.Repository.Interfaces
 {
@@ -9,5 +10,6 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
         Task<List<Book>> GetLatestBooksAsync();
         Task<Book> GetBookByIdAsync(int bookId);
         Task<bool> UpdateLikedPercentBookAsync(Book book, int likedPercent);
+        Task<List<BookSearchDTO>> SearchBookByName(string name);
     }
 }

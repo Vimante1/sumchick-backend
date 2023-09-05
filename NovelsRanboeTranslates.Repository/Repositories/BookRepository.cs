@@ -1,6 +1,9 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
@@ -84,6 +87,15 @@ namespace NovelsRanboeTranslates.Repository.Repositories
                 return false;
             }
         }
+
+        public async Task<List<BookSearchDTO>> SearchBookByName(string name)
+        {
+            var filter = Builders<Book>.Filter.Regex("Title", new BsonRegularExpression(name, "i"));
+            var book = await _collection.Find(filter).ToListAsync();
+            var result = book.Select(book => new BookSearchDTO(book._id, book.Title)).ToList();
+            return result;
+        }
+
 
         public Response<bool> Delete(Book entity)
         {

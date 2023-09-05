@@ -3,7 +3,6 @@ using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
-using ZstdSharp.Unsafe;
 
 namespace NovelsRanboeTranslates.Services.Services
 {

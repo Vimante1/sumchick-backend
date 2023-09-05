@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NovelsRanboeTranslates.Domain.ViewModels
 {
@@ -16,8 +12,10 @@ namespace NovelsRanboeTranslates.Domain.ViewModels
         [Required(ErrorMessage = "Author is a required field")]
         public string Author { get; set; }
         [Required(ErrorMessage = "Original language is a required field")]
-        public string OriginalLanguage{ get; set; }
+        public string OriginalLanguage { get; set; }
         [Required(ErrorMessage = "Genre is a required field")]
-        public List<string> Genre{ get; set; }
+        public string[] Genre { get; set; }
+        [Required(ErrorMessage = "Image is a required field")]
+        public IFormFile Image { get; set; }
     }
 }

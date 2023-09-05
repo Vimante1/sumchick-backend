@@ -10,8 +10,6 @@
             Comment = new List<Comment>();
         }
     }
-
-
     public class Comment
     {
         public string AuthorComment { get; set; }
@@ -29,6 +27,4 @@
             Time = formattedDateTime;
         }
     }
-
-
 }

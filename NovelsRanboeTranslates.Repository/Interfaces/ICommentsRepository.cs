@@ -7,6 +7,5 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
         public Task<bool> CreateCommentsAsync(Comments comments);
         public Task<bool> UpdateCommentsAsync(Comments comments);
         public Task<Comments> GetCommentsAsync(int id);
-
     }
 }

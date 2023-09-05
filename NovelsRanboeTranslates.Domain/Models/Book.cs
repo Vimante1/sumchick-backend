@@ -8,12 +8,12 @@
         public string ImagePath { get; set; }
         public string Author { get; set; }
         public string OriginalLanguage { get; set; }
-        public List<string> Genre { get; set; }
+        public string[] Genre { get; set; }
         public int Views { get; set; }
         public DateTime Created { get; set; }
         public int? LikedPercent { get; set; }
 
-        public Book(string title, string description, string author, string originalLanguage, List<string> genre, string imagePath)
+        public Book(string title, string description, string author, string originalLanguage, string[] genre, string imagePath)
         {
             Random random = new();
             _id = random.Next(999999999);

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
+using System.Net;
 
 namespace NovelsRanboeTranslates.Controllers
 {
@@ -115,33 +115,46 @@ namespace NovelsRanboeTranslates.Controllers
         public async Task<IActionResult> GetChapterToRead(ChapterToReadViewModel model)
         {
             var chapters = await _chapterService.GetChaptersAsync(model.BookId);
-            var chapterContain = chapters.Result.Chapter.Find(c => c.ChapterId == model.ChapterId);
-            if (chapters == null || chapterContain == null)
+            if (chapters == null)
             {
-                return Ok(new Response<Chapters>("Chapter not found", null, System.Net.HttpStatusCode.NotFound));
+                return NotFound(new Response<Chapters>("Chapter not found", null, HttpStatusCode.NotFound));
+            }
+            var chapterContain = chapters.Result.Chapter.Find(c => c.ChapterId == model.ChapterId);
+            if (chapterContain == null)
+            {
+                return NotFound(new Response<Chapters>("Chapter not found", null, HttpStatusCode.NotFound));
             }
             if (chapterContain.HasPrice)
             {
                 if (!User.Identity.IsAuthenticated)
                 {
-                    return Ok(new Response<Chapter>("Unauthorize", null, System.Net.HttpStatusCode.Unauthorized));
+                    return Unauthorized(new Response<Chapter>("Unauthorize", null, HttpStatusCode.Unauthorized));
                 }
                 var user = _userService.GetUserByLogin(User.Claims.FirstOrDefault().Value);
                 var purchasedBook = user.Result.Purchased.Find(u => u.BookID == model.BookId);
                 var purchasedChapter = purchasedBook.ChapterID.Contains(model.ChapterId);
                 if (purchasedChapter)
                 {
-                    return Ok(new Response<Chapter>("correct", chapterContain, System.Net.HttpStatusCode.OK));
+                    return Ok(new Response<Chapter>("Correct", chapterContain, HttpStatusCode.OK));
                 }
                 else
                 {
-                    return Ok(new Response<Chapter>("Not find in purchased", null, System.Net.HttpStatusCode.NotFound));
+                    return NotFound(new Response<Chapter>("Not found in purchased", null, HttpStatusCode.NotFound));
                 }
             }
             else
             {
-                return Ok(new Response<Chapter>("correct", chapterContain, System.Net.HttpStatusCode.OK));
+                return Ok(new Response<Chapter>("Correct", chapterContain, HttpStatusCode.OK));
             }
+
         }
+        [HttpGet]
+        [Route("SearchBookByName")]
+        public async Task<IActionResult> SearchBookByName(string bookName)
+        {
+            var bookList = await _bookService.SearchBookByName(bookName);
+            return Ok(bookList);
+        }
+
     }
 }

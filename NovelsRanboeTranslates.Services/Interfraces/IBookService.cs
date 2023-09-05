@@ -1,4 +1,5 @@
-﻿using NovelsRanboeTranslates.Domain.Models;
+﻿using NovelsRanboeTranslates.Domain.DTOs;
+using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 
 namespace NovelsRanboeTranslates.Services.Interfraces
@@ -10,5 +11,6 @@ namespace NovelsRanboeTranslates.Services.Interfraces
         Response<List<Book>> GetBestBooksByGenre();
         Task<Response<Book>> GetBookByIdAsync(int bookId);
         Task<bool> UpdateLikedPercent(int bookId, int likedPercent);
+        Task<List<BookSearchDTO>> SearchBookByName(string name);
     }
 }

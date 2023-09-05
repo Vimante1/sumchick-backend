@@ -19,7 +19,6 @@ namespace NovelsRanboeTranslates
             builder.Services.AddScoped<IMongoDbSettings>(sp =>
             {
                 var conf = builder.Configuration.GetSection("MongoDbConnection");
-                // Replace with your actual MongoDB connection string and database name
                 return new MongoDbSettings
                 {
                     ConnectionString = conf.GetValue<string>("ConnectionString"),

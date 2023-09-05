@@ -25,7 +25,7 @@ namespace NovelsRanboeTranslates.Services.Services
                 _chapterRepository.UpdateChaptersAsync(chapters);
                 return new Response<bool>("Chapter correct added", true, System.Net.HttpStatusCode.OK);
             }
-            Chapters newChapters = new Chapters(bookId);
+            var newChapters = new Chapters(bookId);
             chapter.ChapterId = 1;
             newChapters.Chapter.Add(chapter);
             _chapterRepository.CreateChaptersAsync(newChapters);
