@@ -156,5 +156,13 @@ namespace NovelsRanboeTranslates.Controllers
             return Ok(bookList);
         }
 
+        [HttpPost]
+        [Route("AdvancedSearch")]
+        public async Task<IActionResult> AdvancedSearch(string originalLanguage, int sortType, string[] genres, int skipCounter)
+        {
+            var result = await _bookService.AdvancedSearch(originalLanguage, sortType, genres, skipCounter);
+            return Ok(result);
+        }
+
     }
 }

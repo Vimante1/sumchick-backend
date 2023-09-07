@@ -12,5 +12,6 @@ namespace NovelsRanboeTranslates.Services.Interfraces
         Task<Response<Book>> GetBookByIdAsync(int bookId);
         Task<bool> UpdateLikedPercent(int bookId, int likedPercent);
         Task<List<BookSearchDTO>> SearchBookByName(string name);
+        Task<List<Book>> AdvancedSearch(string originalLanguage, int sortType, string[] genres, int skipCounter);
     }
 }

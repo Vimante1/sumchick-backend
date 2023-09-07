@@ -3,13 +3,16 @@ using MongoDB.Driver;
 using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
+using System.Linq.Expressions;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
     public class BookRepository : BaseRepository<Book>, IBookRepository
     {
-        public BookRepository(IMongoDbSettings settings) : base(settings, "Book") { }
+        public BookRepository(IMongoDbSettings settings) : base(settings, "Book")
+        {
+        }
 
         public Response<bool> Create(Book entity)
         {
@@ -21,7 +24,9 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             catch (Exception ex)
             {
                 return new Response<bool>(ex.Message, false, System.Net.HttpStatusCode.BadRequest);
-            };
+            }
+
+            ;
         }
 
         public async Task<List<Book>> GetBestBooksByGenreAsync(List<string> genres)
@@ -30,8 +35,8 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             var sort = Builders<Book>.Sort.Descending("LikedPercent");
 
             var bestBooks = await _collection.Find(filter)
-                                             .Sort(sort)
-                                             .ToListAsync();
+                .Sort(sort)
+                .ToListAsync();
 
             return bestBooks;
         }
@@ -40,9 +45,9 @@ namespace NovelsRanboeTranslates.Repository.Repositories
         {
             var sort = Builders<Book>.Sort.Descending("Created");
             var latestBooks = await _collection.Find(_ => true)
-                                                .Sort(sort)
-                                                .Limit(20)
-                                                .ToListAsync();
+                .Sort(sort)
+                .Limit(20)
+                .ToListAsync();
             return latestBooks;
         }
 
@@ -69,9 +74,11 @@ namespace NovelsRanboeTranslates.Repository.Repositories
                 await _collection.UpdateOneAsync(filter, update);
                 return true;
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
         }
-
 
         public bool ReplaceBookById(int bookId, Book newBook)
         {
@@ -79,7 +86,11 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             {
                 var filter = Builders<Book>.Filter.Eq("_id", bookId);
                 var result = _collection.ReplaceOneAsync(filter, newBook);
-                if (result != null) { return true; }
+                if (result != null)
+                {
+                    return true;
+                }
+
                 return false;
             }
             catch
@@ -96,10 +107,34 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             return result;
         }
 
-
         public Response<bool> Delete(Book entity)
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<Book>> AdvancedSearch(string originalLanguage, int sortType, string[] genres, int skipCounter)
+        {
+            var filterBuilder = Builders<Book>.Filter;
+            var filter = filterBuilder.Empty;
+            filter &= genres.Length != 0 ? filterBuilder.All("Genre", genres) : filter;
+            filter &= originalLanguage != "Any" ? filterBuilder.Eq("OriginalLanguage", originalLanguage) : filter;
+
+            var sortDefinition = sortType switch
+            {
+                0 => Builders<Book>.Sort.Ascending(p => p.Title),           // 0 = Sorted by name
+                1 => Builders<Book>.Sort.Descending(p => p.Created),        // 1 = New books
+                2 => Builders<Book>.Sort.Descending(p => p.LikedPercent),   // 2 = Best books by liked percent
+                _ => null
+            };
+
+            var result = await _collection.Find(filter)
+                .Sort(sortDefinition)
+                .Skip(skipCounter)
+                .Limit(20)
+                .ToListAsync();
+
+            return result;
+        }
+
     }
 }

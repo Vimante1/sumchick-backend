@@ -45,6 +45,7 @@ namespace NovelsRanboeTranslates.Services.Services
                 return new Response<ChaptersDTO>("ChaptersNotFound", null, System.Net.HttpStatusCode.NotFound);
             }
         }
+
         public async Task<Response<Chapters>> GetChaptersAsync(int bookId)
         {
             var chapters = await _chapterRepository.GetChaptersAsync(bookId);

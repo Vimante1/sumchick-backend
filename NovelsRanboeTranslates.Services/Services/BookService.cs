@@ -21,6 +21,7 @@ namespace NovelsRanboeTranslates.Services.Services
             var newBook = new Book(book.Title, book.Description, book.Author, book.OriginalLanguage, book.Genre, imagePath);
             return _repository.Create(newBook);
         }
+
         public Response<List<Book>> GetBestBooksByGenre()
         {
             try
@@ -34,6 +35,7 @@ namespace NovelsRanboeTranslates.Services.Services
                 return new Response<List<Book>>("Something wrong with get from DB", null, System.Net.HttpStatusCode.BadRequest);
             }
         }
+
         public Response<List<Book>> GetLatestBooks()
         {
             try
@@ -68,6 +70,20 @@ namespace NovelsRanboeTranslates.Services.Services
         public async Task<List<BookSearchDTO>> SearchBookByName(string name)
         {
             return await _repository.SearchBookByName(name);
+        }
+
+        public async Task<List<Book>> AdvancedSearch(string originalLanguage, int sortType, string[] genres, int skipCounter)
+        {
+            try
+            {
+                var result = await _repository.AdvancedSearch(originalLanguage, sortType, genres, skipCounter);
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<Book>();
+            }
+
         }
     }
     

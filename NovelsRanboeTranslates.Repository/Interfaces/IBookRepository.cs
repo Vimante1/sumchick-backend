@@ -11,5 +11,6 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
         Task<Book> GetBookByIdAsync(int bookId);
         Task<bool> UpdateLikedPercentBookAsync(Book book, int likedPercent);
         Task<List<BookSearchDTO>> SearchBookByName(string name);
+        Task<List<Book>> AdvancedSearch(string originalLanguage, int sortType, string[] genres, int skipCounter);
     }
 }
