@@ -125,7 +125,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
                 1 => Builders<Book>.Sort.Descending(p => p.Created),        // 1 = New books
                 2 => Builders<Book>.Sort.Descending(p => p.LikedPercent),   // 2 = Best books by liked percent
                 _ => null
-            };
+            }; 
 
             var result = await _collection.Find(filter)
                 .Sort(sortDefinition)

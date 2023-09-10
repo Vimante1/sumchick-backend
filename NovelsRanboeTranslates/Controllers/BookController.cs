@@ -158,9 +158,9 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpPost]
         [Route("AdvancedSearch")]
-        public async Task<IActionResult> AdvancedSearch(string originalLanguage, int sortType, string[] genres, int skipCounter)
+        public async Task<IActionResult> AdvancedSearch(AdvancedSearchViewModel model)
         {
-            var result = await _bookService.AdvancedSearch(originalLanguage, sortType, genres, skipCounter);
+            var result = await _bookService.AdvancedSearch(model.OriginalLanguage, model.SortType, model.Genres, model.SkipCounter);
             return Ok(result);
         }
 
