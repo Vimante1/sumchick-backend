@@ -29,6 +29,7 @@ namespace NovelsRanboeTranslates
 
 
             builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWTSettings"));
+            builder.Services.Configure<PaypalCredentials>(builder.Configuration.GetSection("PaypalCredentials"));
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy =>

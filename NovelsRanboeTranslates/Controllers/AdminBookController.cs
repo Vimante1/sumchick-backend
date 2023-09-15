@@ -32,13 +32,13 @@ namespace NovelsRanboeTranslates.Controllers
                     {
                         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(book.Image.FileName)}";
 
-                        var imagePath = Path.Combine("~/Images", fileName);
+                        var imagePath = Path.Combine("/app/images/", fileName);
 
                         using (var stream = new FileStream(imagePath, FileMode.Create))
                         {
                             book.Image.CopyTo(stream);
                         }
-                        return Ok(_bookService.CreateNewBook(book, imagePath));
+                        return Ok(_bookService.CreateNewBook(book, "http://158.101.181.252/images/" + fileName));
                     }
                     else
                     {

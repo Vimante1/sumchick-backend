@@ -148,6 +148,7 @@ namespace NovelsRanboeTranslates.Controllers
             }
 
         }
+
         [HttpGet]
         [Route("SearchBookByName")]
         public async Task<IActionResult> SearchBookByName(string bookName)
