@@ -30,6 +30,7 @@ namespace NovelsRanboeTranslates
 
             builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWTSettings"));
             builder.Services.Configure<PaypalCredentials>(builder.Configuration.GetSection("PaypalCredentials"));
+            builder.Services.Configure<AdvCashPassword>(builder.Configuration.GetSection("AdvCashPassword"));
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy =>
@@ -75,6 +76,8 @@ namespace NovelsRanboeTranslates
             builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
             builder.Services.AddScoped<ICommentsService, CommentsService>();
             builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();

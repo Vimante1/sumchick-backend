@@ -97,5 +97,20 @@ namespace NovelsRanboeTranslates.Services.Services
             return new Response<bool>("Correct", result, System.Net.HttpStatusCode.OK);
 
         }
+
+        public async Task<bool> AddToBalance(string login, decimal value)
+        {
+            try
+            {
+                var user = _repository.GetUserByLogin(login);
+                user.Result.Balance += value;
+                var result = _repository.ReplaceUserByLogin(login, user.Result);
+                return result;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }
