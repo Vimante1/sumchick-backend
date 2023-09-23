@@ -8,6 +8,7 @@ using NovelsRanboeTranslates.Services.Interfraces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace NovelsRanboeTranslates.Controllers
 {
@@ -85,7 +86,7 @@ namespace NovelsRanboeTranslates.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("BuyChapter")]
         [Authorize]
         public async Task<IActionResult> BuyChapter(BuyChapterViewModel model)
@@ -110,6 +111,18 @@ namespace NovelsRanboeTranslates.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("AddToBalance")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> AddToBalance(string login, decimal value)
+        {
+            var user = _userService.GetBaseUserByLogin(login);
+            if (user.Result == null) return BadRequest("User Not found");
+            var addOperation = await _userService.AddToBalance(login, value);
+            if (addOperation) return Ok("Success");
+            return BadRequest("Something wrong with add operation");
+        }
+
         private string GetToken(User user)
         {
             List<Claim> claims = new();
@@ -125,9 +138,7 @@ namespace NovelsRanboeTranslates.Controllers
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
             );
-
             return new JwtSecurityTokenHandler().WriteToken(jwt);
-
         }
     }
 }

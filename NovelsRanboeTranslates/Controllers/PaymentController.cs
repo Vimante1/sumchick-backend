@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace NovelsRanboeTranslates.Controllers
 {
     [ApiController]
-    [Route("/Paymant")]
+    [Route("/Payment")]
     public class PaymentController : ControllerBase
     {
         private readonly PaypalCredentials _paypal;
