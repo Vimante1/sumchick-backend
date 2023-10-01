@@ -10,9 +10,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
 {
     public class BookRepository : BaseRepository<Book>, IBookRepository
     {
-        public BookRepository(IMongoDbSettings settings) : base(settings, "Book")
-        {
-        }
+        public BookRepository(IMongoDbSettings settings) : base(settings, "Book"){}
 
         public Response<bool> Create(Book entity)
         {
@@ -105,6 +103,13 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             var book = await _collection.Find(filter).ToListAsync();
             var result = book.Select(book => new BookSearchDTO(book._id, book.Title)).ToList();
             return result;
+        }
+
+        public async void AddViewToBookById(int bookId)
+        {
+            var filter = Builders<Book>.Filter.Eq("_id", bookId);
+            var update = Builders<Book>.Update.Inc("Views", 1);
+            await _collection.UpdateOneAsync(filter, update);
         }
 
         public Response<bool> Delete(Book entity)

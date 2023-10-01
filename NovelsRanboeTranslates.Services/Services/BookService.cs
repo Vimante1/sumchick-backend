@@ -72,6 +72,11 @@ namespace NovelsRanboeTranslates.Services.Services
             return await _repository.SearchBookByName(name);
         }
 
+        public void AddViewToBookById(int bookId)
+        {
+             _repository.AddViewToBookById(bookId);
+        }
+
         public async Task<List<Book>> AdvancedSearch(string originalLanguage, int sortType, string[] genres, int skipCounter)
         {
             try

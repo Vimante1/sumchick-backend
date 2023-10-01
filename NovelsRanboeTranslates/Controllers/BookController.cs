@@ -46,7 +46,7 @@ namespace NovelsRanboeTranslates.Controllers
         public async Task<IActionResult> GetBookById(int bookId)
         {
             var result = await _bookService.GetBookByIdAsync(bookId);
-
+            _bookService.AddViewToBookById(bookId);
             if (result != null)
             {
                 return Ok(result);
@@ -164,6 +164,5 @@ namespace NovelsRanboeTranslates.Controllers
             var result = await _bookService.AdvancedSearch(model.OriginalLanguage, model.SortType, model.Genres, model.SkipCounter);
             return Ok(result);
         }
-
     }
 }

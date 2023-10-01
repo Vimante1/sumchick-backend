@@ -11,7 +11,6 @@ namespace NovelsRanboeTranslates.Services.Interfraces
         Response<User> GetBaseUserByLogin(string login);
         Response<UserDTO> GetUserByLogin(string login);
         Response<User> Login(AuthorizationViewModel user);
-
         Task<bool> AddToBalance(string login, decimal value);
     }
 }
