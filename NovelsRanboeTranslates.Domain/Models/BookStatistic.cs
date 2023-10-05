@@ -22,4 +22,12 @@ public class ChaptersStatistic
     public decimal Earnings { get; set; }
     public int BuyCounter { get; set; }
     public int ReadCounter { get; set; }
+
+    public ChaptersStatistic(int chapterId, decimal earnings, int buyCounter, int readCounter)
+    {
+        ChapterId = chapterId;
+        Earnings = earnings;
+        BuyCounter = buyCounter;
+        ReadCounter = readCounter;
+    }
 }

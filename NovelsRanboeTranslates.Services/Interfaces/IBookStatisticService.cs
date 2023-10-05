@@ -9,7 +9,8 @@ namespace NovelsRanboeTranslates.Services.Interfaces
 {
     public interface IBookStatisticService
     {
-        Task<bool> AddPurchasedChapter(int bookId, int chapterId);
-        Task<List<BookStatistic>> GetStatisticListByParameter(int parameter);
+        Task<bool> AddPurchasedChapter(int bookId, int chapterId, decimal price);
+        Task<List<BookStatistic>> GetStatisticList();
+        void AddOneReadToChapterCounter(int bookId, int chapterId);
     }
 }

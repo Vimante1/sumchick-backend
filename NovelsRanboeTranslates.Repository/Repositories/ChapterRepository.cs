@@ -18,6 +18,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
         {
             throw new NotImplementedException();
         }
+
         public async Task<bool> UpdateChaptersAsync(Chapters chapters)
         {
             try
@@ -55,6 +56,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             }
             catch { return null; }
         }
+
         public async Task<ChaptersDTO> GetChaptersDTOAsync(int id)
         {
             try

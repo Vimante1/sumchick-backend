@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using NovelsRanboeTranslates.Services.Interfaces;
 
 namespace NovelsRanboeTranslates.Controllers
 {
@@ -20,12 +21,14 @@ namespace NovelsRanboeTranslates.Controllers
         private readonly IBookService _bookService;
         private readonly IChapterService _chapterService;
         private readonly JWTSettings _options;
-        public UserController(IUserService userService, IOptions<JWTSettings> options, IBookService bookService, IChapterService chapterService)
+        private readonly IBookStatisticService _bookStatistic;
+        public UserController(IUserService userService, IOptions<JWTSettings> options, IBookService bookService, IChapterService chapterService, IBookStatisticService bookStatistic)
         {
             _userService = userService;
             _bookService = bookService;
             _options = options.Value;
             _chapterService = chapterService;
+            _bookStatistic = bookStatistic;
         }
 
         [HttpPost]
@@ -108,6 +111,7 @@ namespace NovelsRanboeTranslates.Controllers
                 return Ok(new Response<bool>("Chapter not found", false, System.Net.HttpStatusCode.NotFound));
             }
             var result = _userService.AddPurchased(model, User.Claims.FirstOrDefault().Value, existingChapter.Price);
+            await _bookStatistic.AddPurchasedChapter(model.BookId, model.ChapterId, existingChapter.Price);
             return Ok(result);
         }
 

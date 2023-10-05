@@ -8,6 +8,7 @@ using NovelsRanboeTranslates.Services.Interfraces;
 using NovelsRanboeTranslates.Services.Services;
 using System.Net.Http.Headers;
 using System.Text;
+using NovelsRanboeTranslates.Services.Interfaces;
 
 namespace NovelsRanboeTranslates
 {
@@ -78,6 +79,8 @@ namespace NovelsRanboeTranslates
             builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IBookStatisticRepository, BookStatisticRepository>();
+            builder.Services.AddScoped<IBookStatisticService, BookStatisticService>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();

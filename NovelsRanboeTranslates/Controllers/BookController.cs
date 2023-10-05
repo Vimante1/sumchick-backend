@@ -4,6 +4,7 @@ using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfraces;
 using System.Net;
+using NovelsRanboeTranslates.Services.Interfaces;
 
 namespace NovelsRanboeTranslates.Controllers
 {
@@ -15,13 +16,15 @@ namespace NovelsRanboeTranslates.Controllers
         private readonly IBookService _bookService;
         private readonly IChapterService _chapterService;
         private readonly IUserService _userService;
+        private readonly IBookStatisticService _bookStatistic;
 
-        public BookController(IBookService bookService, IChapterService chapterService, ICommentsService commentsService, IUserService userService)
+        public BookController(IBookService bookService, IChapterService chapterService, ICommentsService commentsService, IUserService userService, IBookStatisticService bookStatistic)
         {
             _bookService = bookService;
             _chapterService = chapterService;
             _commentsService = commentsService;
             _userService = userService;
+            _bookStatistic = bookStatistic;
         }
 
         [HttpGet]
@@ -128,13 +131,14 @@ namespace NovelsRanboeTranslates.Controllers
             {
                 if (!User.Identity.IsAuthenticated)
                 {
-                    return Unauthorized(new Response<Chapter>("Unauthorize", null, HttpStatusCode.Unauthorized));
+                    return Unauthorized(new Response<Chapter>("Unauthorized", null, HttpStatusCode.Unauthorized));
                 }
                 var user = _userService.GetUserByLogin(User.Claims.FirstOrDefault().Value);
                 var purchasedBook = user.Result.Purchased.Find(u => u.BookID == model.BookId);
                 var purchasedChapter = purchasedBook.ChapterID.Contains(model.ChapterId);
                 if (purchasedChapter)
                 {
+                    _bookStatistic.AddOneReadToChapterCounter(model.BookId, model.ChapterId);
                     return Ok(new Response<Chapter>("Correct", chapterContain, HttpStatusCode.OK));
                 }
                 else
@@ -144,6 +148,7 @@ namespace NovelsRanboeTranslates.Controllers
             }
             else
             {
+                _bookStatistic.AddOneReadToChapterCounter(model.BookId, model.ChapterId);
                 return Ok(new Response<Chapter>("Correct", chapterContain, HttpStatusCode.OK));
             }
 

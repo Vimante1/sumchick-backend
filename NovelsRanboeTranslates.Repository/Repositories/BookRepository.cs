@@ -34,6 +34,7 @@ namespace NovelsRanboeTranslates.Repository.Repositories
 
             var bestBooks = await _collection.Find(filter)
                 .Sort(sort)
+                .Limit(20)
                 .ToListAsync();
 
             return bestBooks;
