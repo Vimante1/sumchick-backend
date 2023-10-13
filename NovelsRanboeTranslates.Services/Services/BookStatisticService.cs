@@ -31,6 +31,7 @@ public class BookStatisticService : IBookStatisticService
                 }
                 else
                 {
+                    await _repository.AddToTotalEarnings(bookId, price);
                     await _repository.AddOneChapterToBook(bookId, new ChaptersStatistic(chapterId, price, 1, 0));
                     return true;
                 }

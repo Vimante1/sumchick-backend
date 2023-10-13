@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
+using NovelsRanboeTranslates.Services.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
 
 namespace NovelsRanboeTranslates.Controllers
@@ -13,11 +15,13 @@ namespace NovelsRanboeTranslates.Controllers
     {
         private readonly IBookService _bookService;
         private readonly IChapterService _chapterService;
+        private readonly IBookStatisticService _bookStatistic;
 
-        public AdminBookController(IBookService bookService, IChapterService chapterService)
+        public AdminBookController(IBookService bookService, IChapterService chapterService, IBookStatisticService bookStatistic)
         {
             _bookService = bookService;
             _chapterService = chapterService;
+            _bookStatistic = bookStatistic;
         }
 
         [HttpPost]
@@ -38,11 +42,11 @@ namespace NovelsRanboeTranslates.Controllers
                         {
                             book.Image.CopyTo(stream);
                         }
-                        return Ok(_bookService.CreateNewBook(book, "http://158.101.181.252/images/" + fileName));
+                        return Ok(_bookService.CreateNewBook(book, "https://udovychenko.site/images/" + fileName));
                     }
                     else
                     {
-                        return BadRequest("Зображення не було завантажено");
+                        return BadRequest("Image not upload");
                     }
                 }
                 catch (Exception ex)
@@ -61,6 +65,20 @@ namespace NovelsRanboeTranslates.Controllers
             if (!ModelState.IsValid) return Ok(ModelState);
             var result = _chapterService.AddChapter(bookId, chapter);
             return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetBookStatisticList")]
+        public async Task<IActionResult> GetBookStatisticList()
+        {
+            return Ok(await _bookStatistic.GetStatisticList());
+        }
+
+        [HttpGet]
+        [Route("GetAllBooks")]
+        public async Task<IActionResult> GetAllBooks()
+        {
+            return Ok(await _bookService.GetAllBooks());
         }
     }
 }

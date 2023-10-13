@@ -2,7 +2,7 @@
 
 public class BookStatistic
 {
-    public readonly int _id;
+    public int _id { get; set; }
     public decimal TotalEarnings { get; set; }
     public int TotalBuyCounter { get; set; }
     public List<ChaptersStatistic> ChaptersStatistic { get; set; }

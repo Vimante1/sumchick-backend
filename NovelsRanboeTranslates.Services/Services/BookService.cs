@@ -22,6 +22,11 @@ namespace NovelsRanboeTranslates.Services.Services
             return _repository.Create(newBook);
         }
 
+        public async Task<List<Book>> GetAllBooks()
+        {
+            return await _repository.GetAllBooks();
+        }
+
         public Response<List<Book>> GetBestBooksByGenre()
         {
             try

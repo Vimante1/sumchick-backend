@@ -17,7 +17,7 @@ namespace NovelsRanboeTranslates.Services.Services
 
         public Response<User> CreateNewUser(RegistrationViewModel user)
         {
-            User newUser = new() { Login = user.Login, Password = user.Password };
+            User newUser = new() { Login = user.Login, Password = user.Password, Purchased = new List<Purchased>()};
 
             var checkName = _repository.GetUserByLogin(user.Login);
             if (checkName.Result != null)

@@ -11,7 +11,7 @@
         public string[] Genre { get; set; }
         public int Views { get; set; }
         public DateTime Created { get; set; }
-        public int? LikedPercent { get; set; }
+        public int LikedPercent { get; set; }
 
         public Book(string title, string description, string author, string originalLanguage, string[] genre, string imagePath)
         {
@@ -24,6 +24,7 @@
             Genre = genre;
             Created = DateTime.Now;
             Views = 0;
+            LikedPercent = 0;
             ImagePath = imagePath;
         }
     }

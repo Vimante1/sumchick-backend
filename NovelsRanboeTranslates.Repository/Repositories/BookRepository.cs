@@ -113,6 +113,11 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             await _collection.UpdateOneAsync(filter, update);
         }
 
+        public async Task<List<Book>> GetAllBooks()
+        {
+            return await _collection.Find(_ => true).ToListAsync();
+        }
+
         public Response<bool> Delete(Book entity)
         {
             throw new NotImplementedException();
