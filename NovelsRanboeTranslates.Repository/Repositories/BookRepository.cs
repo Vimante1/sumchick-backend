@@ -4,7 +4,9 @@ using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using System.Linq.Expressions;
+using NovelsRanboeTranslates.Domain.ViewModels;
 using static System.Reflection.Metadata.BlobBuilder;
+using System.Net;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
@@ -25,6 +27,21 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             }
 
             ;
+        }
+
+        public async Task<bool> UpdateBook(UpdateBookViewModel updateBook)
+        {
+            var filter = Builders<Book>.Filter.Eq("_id", updateBook._id);
+
+            var update = Builders<Book>.Update
+                .Set(b => b.Title, updateBook.Title)
+                .Set(b => b.Description, updateBook.Description)
+                .Set(b => b.Author, updateBook.Author)
+                .Set(b => b.OriginalLanguage, updateBook.OriginalLanguage)
+                .Set(b => b.Genre, updateBook.Genre);
+
+            var result = await _collection.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
         }
 
         public async Task<List<Book>> GetBestBooksByGenreAsync(List<string> genres)

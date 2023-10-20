@@ -58,6 +58,13 @@ namespace NovelsRanboeTranslates.Controllers
             return Ok(ModelState);
         }
 
+        [HttpPut]
+        [Route("UpdateBook")]
+        public async Task<IActionResult> UpdateBook(UpdateBookViewModel updateBook)
+        {
+            return Ok(await _bookService.UpdateBook(updateBook));
+        }
+
         [HttpPost]
         [Route("CreateChapter")]
         public IActionResult CreateChapter(int bookId, Chapter chapter)
