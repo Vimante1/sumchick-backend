@@ -59,5 +59,10 @@ namespace NovelsRanboeTranslates.Services.Services
                 return new Response<Chapters>("ChaptersNotFound", null, System.Net.HttpStatusCode.NotFound);
             }
         }
+
+        public async Task<bool> UpdateOneChapter(int bookId, Chapter updateChapter)
+        {
+            return await _chapterRepository.UpdateOneChaptersAsync(bookId, updateChapter);
+        }
     }
 }

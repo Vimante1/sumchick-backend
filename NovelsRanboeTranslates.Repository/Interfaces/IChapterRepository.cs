@@ -9,5 +9,6 @@ namespace NovelsRanboeTranslates.Repository.Interfaces
         public Task<Chapters> GetChaptersAsync(int id);
         public Task<ChaptersDTO> GetChaptersDTOAsync(int id);
         public Task<bool> UpdateChaptersAsync(Chapters chapters);
+        public Task<bool> UpdateOneChaptersAsync(int bookId, Chapter updateChapter);
     }
 }

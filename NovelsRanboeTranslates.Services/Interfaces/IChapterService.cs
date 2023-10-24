@@ -8,5 +8,6 @@ namespace NovelsRanboeTranslates.Services.Interfraces
         public Response<bool> AddChapter(int bookId, Chapter chapter);
         Task<Response<Chapters>> GetChaptersAsync(int bookId);
         public Task<Response<ChaptersDTO>> GetChaptersDTOAsync(int bookId);
+        public Task<bool> UpdateOneChapter(int bookId, Chapter updateChapter);
     }
 }

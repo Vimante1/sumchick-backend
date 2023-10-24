@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfaces;
@@ -63,6 +62,13 @@ namespace NovelsRanboeTranslates.Controllers
         public async Task<IActionResult> UpdateBook(UpdateBookViewModel updateBook)
         {
             return Ok(await _bookService.UpdateBook(updateBook));
+        }
+
+        [HttpPut]
+        [Route("UpdateOneChapter")]
+        public async Task<IActionResult> UpdateOneChapter(int bookId, Chapter updateChapter)
+        {
+            return Ok(await _chapterService.UpdateOneChapter(bookId, updateChapter));
         }
 
         [HttpPost]

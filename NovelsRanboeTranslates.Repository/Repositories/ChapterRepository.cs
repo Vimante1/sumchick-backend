@@ -33,6 +33,26 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             }
         }
 
+        public async Task<bool> UpdateOneChaptersAsync(int bookId, Chapter updateChapter)
+        {
+            try
+            {
+                var chaptersFilter = Builders<Chapters>.Filter.Eq("_id", bookId);
+                var chapterFilter = Builders<Chapters>.Filter.Eq("Chapter.ChapterId", updateChapter.ChapterId);
+
+                var updateDefinition = Builders<Chapters>.Update
+                    .Set("Chapter.$.HasPrice", updateChapter.HasPrice)
+                    .Set("Chapter.$.Price", updateChapter.Price)
+                    .Set("Chapter.$.Text", updateChapter.Text)
+                    .Set("Chapter.$.Title", updateChapter.Title);
+                var updateResult = await _collection.UpdateOneAsync(chaptersFilter & chapterFilter, updateDefinition);
+                return updateResult.ModifiedCount > 0;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
         public async Task<bool> CreateChaptersAsync(Chapters chapters)
         {
             try
