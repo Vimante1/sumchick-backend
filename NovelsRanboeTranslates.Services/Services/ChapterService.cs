@@ -64,5 +64,10 @@ namespace NovelsRanboeTranslates.Services.Services
         {
             return await _chapterRepository.UpdateOneChaptersAsync(bookId, updateChapter);
         }
+
+        public async Task<Chapter> GetOneChapter(int bookId, int chapterId)
+        {
+            return _chapterRepository.GetOneChapter(bookId, chapterId);
+        }
     }
 }

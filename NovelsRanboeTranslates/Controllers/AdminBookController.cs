@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Services.Interfaces;
@@ -93,5 +94,13 @@ namespace NovelsRanboeTranslates.Controllers
         {
             return Ok(await _bookService.GetAllBooks());
         }
+
+        [HttpGet]
+        [Route("GetOneChapterForUpdate")]
+        public async Task<IActionResult> GetOneChapterForUpdate(int bookId, int chapterId)
+        {
+            return Ok(_chapterService.GetOneChapter(bookId, chapterId));
+        }
+
     }
 }

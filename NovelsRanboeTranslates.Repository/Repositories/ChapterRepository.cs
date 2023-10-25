@@ -2,6 +2,8 @@
 using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
+using System.Security.Cryptography;
+using MongoDB.Bson;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
@@ -53,6 +55,26 @@ namespace NovelsRanboeTranslates.Repository.Repositories
                 return false;
             }
         }
+
+        public Chapter GetOneChapter(int bookId, int chapterId)
+        {
+            //TODO: Rewrite
+            var filter = Builders<Chapters>.Filter.Eq("_id", bookId);
+
+            var chapters = _collection.Find(filter).FirstOrDefault();
+
+            if (chapters != null)
+            {
+                return chapters.Chapter.FirstOrDefault(c => c.ChapterId == chapterId);
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+
         public async Task<bool> CreateChaptersAsync(Chapters chapters)
         {
             try

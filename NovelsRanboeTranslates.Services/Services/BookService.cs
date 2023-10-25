@@ -32,17 +32,18 @@ namespace NovelsRanboeTranslates.Services.Services
             return await _repository.UpdateBook(updateBook);
         }
 
-        public Response<List<Book>> GetBestBooksByGenre()
+        public async Task<List<Book>> GetBestBooksByGenre()
         {
             try
             {
                 var genres = new Genres().GetList();
-                var books = _repository.GetBestBooksByGenreAsync(genres);
-                return new Response<List<Book>>("Correct", books.Result, System.Net.HttpStatusCode.OK);
+                var books = await _repository.GetBestBooksByGenreAsync(genres);
+                return books;
             }
-            catch
+            catch(Exception ex) 
             {
-                return new Response<List<Book>>("Something wrong with get from DB", null, System.Net.HttpStatusCode.BadRequest);
+                Console.WriteLine(ex);
+                return new List<Book> { };
             }
         }
 

@@ -29,9 +29,9 @@ namespace NovelsRanboeTranslates.Controllers
 
         [HttpGet]
         [Route("GetBestBooksByGenre")]
-        public IActionResult GetBestBooksByGenre()
+        public async Task<IActionResult> GetBestBooksByGenre()
         {
-            var books = _bookService.GetBestBooksByGenre();
+            var books = await _bookService.GetBestBooksByGenre();
             return Ok(books);
         }
 

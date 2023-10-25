@@ -3,10 +3,7 @@ using MongoDB.Driver;
 using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
-using System.Linq.Expressions;
 using NovelsRanboeTranslates.Domain.ViewModels;
-using static System.Reflection.Metadata.BlobBuilder;
-using System.Net;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
@@ -46,15 +43,72 @@ namespace NovelsRanboeTranslates.Repository.Repositories
 
         public async Task<List<Book>> GetBestBooksByGenreAsync(List<string> genres)
         {
-            var filter = Builders<Book>.Filter.In("Genre", genres);
+            #region Note
+
+            //var filter = Builders<Book>.Filter.In("Genre", genres);
+            //var bestBooks = await _collection.Find(filter)
+            //    .Sort(sort)
+            //    .Limit(20)
+            //    .ToListAsync();
+            //return bestBooks;
+
+            //var result = new List<Book>()
+            //foreach (var genre in genrelist)
+            //{
+            //    var filter = Builders<Book>.Filter.All("Genre", new string[] { genre });
+            //    var bestBook = await _collection.Find(filter).Sort(sort).FirstOrDefaultAsync();
+            //    if (bestBook != null)
+            //    {
+            //        if (!result.Exists(c => c._id == bestBook._id))
+            //        {
+            //            bestBook.Genre = new string[] { genre };
+            //            result.Add(bestBook);
+            //        }
+            //    }
+            //}
+            //return result;
+
+            //var addedBooks = new HashSet<int>();
+            //var result = new List<Book>();
+            //foreach (var genre in genrelist)
+            //{
+            //    var filter = Builders<Book>.Filter.All("Genre", new string[] { genre });
+            //    var bestBook = await _collection.Find(filter).Sort(sort).FirstOrDefaultAsync();
+            //    if (bestBook != null && addedBooks.Add(bestBook._id))
+            //    {
+            //        bestBook.Genre = new string[] { genre };
+            //        result.Add(bestBook);
+            //    }
+            //}
+            //return result;
+
+            #endregion
+
+            string[] genrelist = { "Арт", "Безумие", "Боевик", "Боевые искуства", "Вампиры", "Героическое фентези", "Детектив", "Драма", "Комедия", "Магия" };
+
+            var filter = Builders<Book>.Filter.In("Genre", genrelist);
             var sort = Builders<Book>.Sort.Descending("LikedPercent");
 
-            var bestBooks = await _collection.Find(filter)
-                .Sort(sort)
-                .Limit(20)
-                .ToListAsync();
+            var distinctGenresCursor = await _collection.DistinctAsync<string>("Genre", filter);
+            var distinctGenres = await distinctGenresCursor.ToListAsync();
 
-            return bestBooks;
+            var result = new List<Book> { };
+
+            foreach (var genre in distinctGenres)
+            {
+                var bestBook = await _collection.Find(book => book.Genre.Contains(genre))
+                    .Sort(sort)
+                    .FirstOrDefaultAsync();
+                
+                if (bestBook != null && !result.Exists(c=> c._id == bestBook._id))
+                {
+                    bestBook.Genre = new string[] { genre };
+                    result.Add(bestBook);
+                }
+            }
+            
+            return result;
+
         }
 
         public async Task<List<Book>> GetLatestBooksAsync()
