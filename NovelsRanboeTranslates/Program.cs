@@ -81,6 +81,8 @@ namespace NovelsRanboeTranslates
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IBookStatisticRepository, BookStatisticRepository>();
             builder.Services.AddScoped<IBookStatisticService, BookStatisticService>();
+            builder.Services.AddScoped<IPosterRepository, PosterRepository>();
+            builder.Services.AddScoped<IPosterService, PosterService>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
