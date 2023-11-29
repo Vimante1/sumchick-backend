@@ -22,8 +22,6 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             {
                 return new Response<bool>(ex.Message, false, System.Net.HttpStatusCode.BadRequest);
             }
-
-            ;
         }
 
         public async Task<bool> UpdateBook(UpdateBookViewModel updateBook)

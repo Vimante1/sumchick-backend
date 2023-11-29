@@ -27,8 +27,8 @@ public class PosterService : IPosterService
         {
             if (image == null || image.Length <= 0) return false;
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-            var localPath = Path.Combine("/app/images/", fileName);
-            //var localPath = Path.Combine("D:/", fileName);
+            //var localPath = Path.Combine("/app/images/", fileName);
+            var localPath = Path.Combine("D:/", fileName);
 
             using (var stream = new FileStream(localPath, FileMode.Create))
             {

@@ -4,16 +4,20 @@ using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Domain.ViewModels;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Services.Interfraces;
+using Microsoft.Extensions.Caching.Memory;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace NovelsRanboeTranslates.Services.Services
 {
     public class BookService : IBookService
     {
         private readonly IBookRepository _repository;
+        private readonly IMemoryCache _memoryCache;
 
-        public BookService(IBookRepository repository)
+        public BookService(IBookRepository repository, IMemoryCache memoryCache)
         {
             _repository = repository;
+            _memoryCache = memoryCache;
         }
 
         public Response<bool> CreateNewBook(CreateNewBookViewModel book, string imagePath)
@@ -34,13 +38,23 @@ namespace NovelsRanboeTranslates.Services.Services
 
         public async Task<List<Book>> GetBestBooksByGenre()
         {
+            
             try
             {
-                var genres = new Genres().GetList();
-                var books = await _repository.GetBestBooksByGenreAsync(genres);
-                return books;
+                if (!_memoryCache.TryGetValue("123123", out List<Book> result))
+                {
+                    var genres = new Genres().GetList();
+                    var books = await _repository.GetBestBooksByGenreAsync(genres);
+
+                    _memoryCache.Set("123123", books, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(2)
+                    });
+                    return books;
+                }
+                return result;
             }
-            catch(Exception ex) 
+            catch (Exception ex) 
             {
                 Console.WriteLine(ex);
                 return new List<Book> { };

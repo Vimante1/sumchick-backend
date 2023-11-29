@@ -4,6 +4,7 @@ using NovelsRanboeTranslates.Services.Interfaces;
 
 namespace NovelsRanboeTranslates.Controllers;
 
+[Route("Poster")]
 public class PosterController : ControllerBase
 {
     public readonly IPosterService _service;
@@ -25,7 +26,7 @@ public class PosterController : ControllerBase
     {
         return Ok(await _service.GetPostersList());
     }
-    [HttpDelete]
+    [HttpDelete] 
     [Route("DeletePoster")]
     public async Task<IActionResult> DeletePoster(int posterId)
     {

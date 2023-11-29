@@ -84,6 +84,7 @@ namespace NovelsRanboeTranslates
             builder.Services.AddScoped<IPosterRepository, PosterRepository>();
             builder.Services.AddScoped<IPosterService, PosterService>();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddMemoryCache();
 
             var app = builder.Build();
 
@@ -104,7 +105,6 @@ namespace NovelsRanboeTranslates
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-
             }
             app.MapControllers();
             app.Run();
