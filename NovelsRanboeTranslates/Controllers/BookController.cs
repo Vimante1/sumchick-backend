@@ -94,17 +94,21 @@ namespace NovelsRanboeTranslates.Controllers
         [HttpPost]
         [Route("AddComments")]
         [Authorize]
-        public IActionResult AddComments(CommentViewModel comment)
+        public async Task<IActionResult> AddComments(CommentViewModel comment)
         {
             var newComment = new Comment(User.Claims.FirstOrDefault().Value, comment.Text, comment.Liked);
+            if (!await _commentsService.IsUserCommentExist(comment.BookId, newComment.AuthorComment))
+            {
+                newComment.IsFirstComment = true;
+            }
             var result = _commentsService.AddComment(comment.BookId, newComment);
             if (result != null)
             {
                 var comments = _commentsService.GetCommentsAsync(comment.BookId).Result;
-                int totalComments = comments.Result.Comment.Count;
-                int likedCount = comments.Result.Comment.Count(c => c.Liked);
+                int totalComments = comments.Result.Comment.Count(c => c.IsFirstComment);
+                int likedCount = comments.Result.Comment.Count(c => c is { Liked: true, IsFirstComment: true });
                 double likedPercentage = likedCount / (double)totalComments * 100;
-                _bookService.UpdateLikedPercent(comment.BookId, (int)likedPercentage);
+                await _bookService.UpdateLikedPercent(comment.BookId, (int)likedPercentage);
                 return Ok(result);
             }
             else

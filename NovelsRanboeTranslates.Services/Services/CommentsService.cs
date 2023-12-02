@@ -41,5 +41,10 @@ namespace NovelsRanboeTranslates.Services.Services
                 return new Response<Comments>("CommentsNotFound", null, System.Net.HttpStatusCode.NotFound);
             }
         }
+
+        public async Task<bool> IsUserCommentExist(int bookId, string userName)
+        {
+            return await _commentsRepository.IsUserCommentExist(bookId, userName);
+        }
     }
 }

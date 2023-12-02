@@ -42,6 +42,13 @@ namespace NovelsRanboeTranslates.Repository.Repositories
             catch { return null; }
         }
 
+        public async Task<bool> IsUserCommentExist(int bookId, string userName)
+        {
+            var filter = Builders<Comments>.Filter.Where(c => c._id == bookId && c.Comment.Any(comment => comment.AuthorComment == userName));
+            var result = await _collection.Find(filter).AnyAsync();
+            return result;
+        }
+
         public async Task<bool> UpdateCommentsAsync(Comments comments)
         {
             try

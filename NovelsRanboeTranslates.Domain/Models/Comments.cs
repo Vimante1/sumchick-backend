@@ -15,6 +15,7 @@
         public string AuthorComment { get; set; }
         public string Text { get; set; }
         public bool Liked { get; set; }
+        public bool IsFirstComment { get; set; }
         public string Time { get; set; }
 
         public Comment(string authorComment, string text, bool liked)
@@ -25,6 +26,7 @@
             DateTime currentTime = DateTime.Now;
             string formattedDateTime = currentTime.ToString("dd.MM.yy HH:mm");
             Time = formattedDateTime;
+            IsFirstComment = false;
         }
     }
 }
