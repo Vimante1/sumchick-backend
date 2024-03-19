@@ -27,15 +27,15 @@ public class PosterService : IPosterService
         {
             if (image == null || image.Length <= 0) return false;
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-            //var localPath = Path.Combine("/app/images/", fileName);
-            var localPath = Path.Combine("D:/", fileName);
+            var localPath = Path.Combine("/app/images/", fileName);
+            //var localPath = Path.Combine("D:/", fileName);
 
             using (var stream = new FileStream(localPath, FileMode.Create))
             {
                 image.CopyTo(stream);
             }
 
-            var publicPath = "https://udovychenko.site/images/" + fileName;
+            var publicPath = "http://localhost:8080/images" + fileName;
             var poster = new Poster(id, publicPath);
             return await _repository.CreatePoster(poster);
 

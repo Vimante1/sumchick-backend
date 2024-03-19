@@ -3,11 +3,10 @@
     public class Comments
     {
         public int _id { get; set; }
-        public List<Comment> Comment { get; set; }
+        public List<Comment> Comment = new List<Comment>();
         public Comments(int id)
         {
             _id = id;
-            Comment = new List<Comment>();
         }
     }
     public class Comment

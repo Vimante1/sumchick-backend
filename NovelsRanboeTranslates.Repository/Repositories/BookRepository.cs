@@ -4,6 +4,7 @@ using NovelsRanboeTranslates.Domain.DTOs;
 using NovelsRanboeTranslates.Domain.Models;
 using NovelsRanboeTranslates.Repository.Interfaces;
 using NovelsRanboeTranslates.Domain.ViewModels;
+using NovelsRanboeTranslates.Domain.Lists;
 
 namespace NovelsRanboeTranslates.Repository.Repositories
 {
@@ -82,9 +83,8 @@ namespace NovelsRanboeTranslates.Repository.Repositories
 
             #endregion
 
-            string[] genrelist = { "Арт", "Безумие", "Боевик", "Боевые искуства", "Вампиры", "Героическое фентези", "Детектив", "Драма", "Комедия", "Магия" };
 
-            var filter = Builders<Book>.Filter.In("Genre", genrelist);
+            var filter = Builders<Book>.Filter.In("Genre", genres);
             var sort = Builders<Book>.Sort.Descending("LikedPercent");
 
             var distinctGenresCursor = await _collection.DistinctAsync<string>("Genre", filter);

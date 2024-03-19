@@ -34,10 +34,12 @@ namespace NovelsRanboeTranslates.Controllers
                 {
                     if (book.Image != null && book.Image.Length > 0)
                     {
+                        Console.WriteLine( "here");
                         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(book.Image.FileName)}";
 
-                        var imagePath = Path.Combine("/app/images/", fileName);
-
+                        var imagePath = Path.Combine("/app/images", fileName);
+                        // for test : D:/images/
+                        //for prod : /app/images 
                         using (var stream = new FileStream(imagePath, FileMode.Create))
                         {
                             book.Image.CopyTo(stream);
