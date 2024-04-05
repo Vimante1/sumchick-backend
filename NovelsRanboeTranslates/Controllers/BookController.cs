@@ -83,7 +83,7 @@ namespace NovelsRanboeTranslates.Controllers
             var result = await _commentsService.GetCommentsAsync(bookId);
             if (result != null)
             {
-                return Ok(result);
+                return Ok(result.Result.Comment);
             }
             else
             {
